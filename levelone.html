@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Damagotchi</title>
+    <link type="text/css" rel="stylesheet" href="dama_levelone_css.css">
+  
+</head>
+<body>
+    <div id="fade_in"></div> <!-- 페이드 인 아웃 -->
+    <div id="fade_out"></div> <!-- 페이드 인 아웃 -->
+    <!-- 전체 화면을 차지하는 컨테이너 -->
+    <div class="container">
+        
+        <div class="damagotchi" id="damagotchi">
+            <img src="damagotchi.png" alt="Damagotchi" style="max-width: 1000px;">
+        </div>
+        <div class="damagotchiName" id="damagotchiName"></div>
+
+        <div class="select_section">
+            <div class="select_text_section">
+                <button class="select_button" id="button1">클릭시 버튼 2개 생성</button>
+                <button class="select_button" id="button2">더 알아보기</button>
+                <button class="select_button" id="button3">더 알아보기</button>
+                <button class="select_button" id="button4">더 알아보기</button>
+            </div>
+        </div>
+        
+        <div class="foodminigame_section">
+            <img src="food.png" alt="foodminigame" onclick="foodMinigameClicked()">
+        </div>
+
+        <div class="happyminigame_section">
+            <img src="happy.png" alt="happyminigame" onclick="happyMinigameClicked()">
+        </div>
+
+        <div class="status_section" id="foodStatus">Food: 0</div>
+        <div class="status_section happy" id="happyStatus">Happy: 0</div>
+
+        <div class = "talk_section" id="talkSection">
+            <!-- 다마고치와 대화할 때 출력될 텍스트가 여기에 표시됩니다. -->
+            <div class="talk_text_area" id="talkText"></div>
+        </div>
+    </div><!--컨테이너-->
+
+    <script src = "textfile.js"></script>> <!--텍스트 파일 가져오기-->
+    <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
+
+    <script>
+         window.onload = function() {//필수 코드!!!!!!!!
+            fade_in();
+        };
+        // 버튼 활성화 함수
+        function activateButtons(num) {
+            Number(num);// 문자열 정수로 변환
+            for (let i = 1; i <= 4; i++) {
+                const button = document.getElementById(`button${i}`);
+                if (button) {
+                    if (i <= num) {
+                        button.style.display = 'block'; // 버튼을 보이도록 설정
+                        button.innerText = selectTexts[i - 1]; // 각 버튼에 대한 텍스트 설정
+                    } else {
+                        button.style.display = 'none'; // 버튼을 숨김
+                    }
+                }
+            }
+        }
+        function setSelectNum(select_num){
+            Number(select_num); 
+            localStorage.setItem('select_button_num', select_num);// 대화창 지정한 값으로 변환
+            activateButtons(select_num);// 버튼 초기화
+        }
+        function foodMinigameClicked() {
+
+            window.location.href = 'foodminigame.html';
+        }
+
+        // happy minigame 클릭 시 실행할 함수
+        function happyMinigameClicked() {
+
+            window.location.href = 'happyminigame.html';
+        }
+
+        let buttonNum = localStorage.getItem('select_button_num');
+        activateButtons(buttonNum); // 로컬 스토리지 값에 따라 버튼 활성화
+
+        // 로컬 스토리지에서 이름을 가져와서 출력
+        const name = localStorage.getItem('damagotchiName') || '다마고치'; // 이름이 없으면 기본값 사용
+        document.getElementById('damagotchiName').innerText = `${name}`;
+        
+        // food와 happy 변수를 로컬 스토리지에서 가져와서 출력
+        const food = localStorage.getItem('food') || 0; // 기본값은 0
+        const happy = localStorage.getItem('happy') || 0; // 기본값은 0
+        document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
+        document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
+
+        // 다마고치 클릭 이벤트
+        document.getElementById('damagotchi').addEventListener('click', () => {
+            // 1부터 3까지 랜덤한 정수 생성
+            const randomValue = Math.floor(Math.random() * 3) + 1; // 1~3랜덤값
+            let talkText; // 텍스트를 저장할 변수
+            talkText = talkTexts[randomValue-1];// 파일에서 가져오는 텍스트 파일
+            document.getElementById('talkText').innerText = talkText;
+        });// 다마고치 클릭 이벤트
+
+         document.getElementById('button1').addEventListener('click', function() {
+            setSelectNum(2);
+        });
+        document.getElementById('button2').addEventListener('click', function() {
+            setSelectNum(4);
+        });
+
+        document.getElementById('button3').addEventListener('click', function() {
+            setSelectNum(3);
+
+        });
+        document.getElementById('button4').addEventListener('click', function() {
+            document.getElementById('talkText').innerText = '자 드가자~';
+        });
+    </script>
+</body>
+</html>

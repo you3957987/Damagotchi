@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Mini Game</title>
+    <style>
+        /* 화면 전체를 채우는 컨테이너 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif; /* 기본 폰트 사용 */
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+            background-color: #f7fafc; /* 배경색 */
+            background-image: url('mainbackground.png'); /* 배경 이미지 추가 */
+            background-size: cover; /* 배경 이미지가 컨테이너를 가득 채우도록 설정 */
+            background-position: center; /* 배경 이미지의 위치를 중앙으로 설정 */
+            position: relative; /* 자식 요소들이 이 컨테이너를 기준으로 위치함 */
+        }
+        /* 미니게임 텍스트 */
+        .gameTitle {
+            position: absolute;
+            top: 10%; /* 상단 20% */
+            left: 50%; /* 가로 중앙에 위치 */
+            transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
+            font-size: 36px; /* 텍스트 크기 */
+            color: #333; /* 텍스트 색상 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+        }
+        /* 뒤로 가기 버튼 */
+        .backButton {
+            position: absolute;
+            top: 80%; /* 상단 80% */
+            left: 50%; /* 가로 중앙에 위치 */
+            transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
+            padding: 10px 20px; /* 안쪽 여백 */
+            font-size: 20px; /* 텍스트 크기 */
+            color: white; /* 텍스트 색상 */
+            background-color: #007bff; /* 버튼 색상 */
+            border: none; /* 테두리 없음 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            cursor: pointer; /* 커서 포인터 변경 */
+            opacity: 0.5; /* 비활성화 효과 */
+            pointer-events: none; /* 클릭 비활성화 */
+        }
+        .backButton.active {
+            opacity: 1; /* 활성화된 경우 불투명 */
+            pointer-events: auto; /* 클릭 활성화 */
+        }
+
+        .backButton:hover {
+            background-color: #0056b3; /* 버튼 호버 색상 */
+        }
+        .gamebutton {
+            position: absolute;
+            top: 50%; /* 상단 80% */
+            left: 50%; /* 가로 중앙에 위치 */
+            transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
+            padding: 10px 20px; /* 안쪽 여백 */
+            font-size: 20px; /* 텍스트 크기 */
+            color: white; /* 텍스트 색상 */
+            background-color: #007bff; /* 버튼 색상 */
+            border: none; /* 테두리 없음 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            cursor: pointer; /* 커서 포인터 변경 */
+            opacity: 0.5; /* 비활성화 효과 */
+        }
+
+        /* 포만감 텍스트 */
+        .statusText {
+            position: absolute;
+            top: 70%; /* 버튼 바로 위 */
+            left: 50%; /* 가로 중앙에 위치 */
+            transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
+            font-size: 24px; /* 텍스트 크기 */
+            color: #333; /* 텍스트 색상 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            display: none; /* 기본적으로 숨김 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="gameTitle">Happy Mini Game</div>
+        <button class="gamebutton" id="increaseFoodButton">행복도 증가</button>
+        <div class="statusText" id="statusText">행복도 10 증가</div>
+        <button class="backButton" id="backButton">뒤로 가기</button>    
+    </div>
+
+    <script>
+        const backButton = document.getElementById('backButton');
+        const statusText = document.getElementById('statusText');
+        const increaseFoodButton = document.getElementById('increaseFoodButton');
+
+        // 로컬 스토리지에서 happy 값을 가져오기
+        let happy = parseInt(localStorage.getItem('happy')) || 0; // 기본값으로 0 설정
+
+        // 포만감 증가 버튼 클릭 이벤트
+        increaseFoodButton.addEventListener('click', function() {
+            happy += 10; // 포만감 10 증가
+            localStorage.setItem('happy', happy); // 로컬 스토리지에 저장
+
+            statusText.style.display = 'block'; // 텍스트 보이기
+            backButton.classList.add('active'); // 뒤로 가기 버튼 활성화
+        });
+         backButton.addEventListener('click', function() {
+            // 잠시 기다린 후 페이지 이동
+            setTimeout(() => {
+                window.history.back();
+            }, 500); // 500ms 후에 페이지 이동
+        });
+    </script>
+</body>
+</html>
