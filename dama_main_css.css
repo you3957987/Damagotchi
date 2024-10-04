@@ -3,6 +3,7 @@ body, html {
             padding: 0;
             height: 100%;
             font-family: Arial, sans-serif; /* 기본 폰트 사용 */
+            overflow: hidden; /* 비율 맞추기 필수!! 스크롤 방지 */
         }
 
         .container {
@@ -18,36 +19,46 @@ body, html {
         /* 다마고치 이미지 */
         .damagotchi {
             position: absolute;
-            top: calc(50% - 100px); /* 중앙에서 100픽셀 위로 위치 */
-            left: 50%;               /* 가로 중앙에 위치 */
-            transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 18%; /* 컨테이너 기준으로 크기 설정 */
+            height: auto;
         }
 
+        .damagotchi img {
+            width: 100%; /* 부모 .damagotchi 기준으로 100% */
+            height: auto; /* 이미지 비율 유지 */
+        }
         /* 입력 필드 위 문구 */
         .text {
             position: absolute;
-            top: 70%;  /* 입력 필드보다 약간 위쪽 */
+            top: 68%;  /* 입력 필드보다 약간 위쪽 */
             left: 50%; /* 가로 중앙에 위치 */
             transform: translate(-50%, 0); /* 가로 중앙 정렬 */
             font-size: 18px; /* 텍스트 크기 */
             color: #333;
+            text-align: center; /* 텍스트를 가로 중앙 정렬 */
         }
 
         /* 입력 필드 */
         .input {
-            width: 200px; /* 입력 필드의 너비 */
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             position: absolute;
-            top: 75%;  /* 컨테이너의 60% 지점에 위치 */
+            top: 73%;  /* 컨테이너의 60% 지점에 위치 */
             left: 50%; /* 가로 중앙에 위치 */
             transform: translate(-50%, 0); /* 가로 중앙 정렬 */
+            width: 10%;
+            height: auto;
+            text-align: center; /* 텍스트를 가로 중앙 정렬 */
         }
 
         /* 시작 버튼 */
         .button {
-            width: 400px; /* 버튼의 너비 */
+            width: 20%; /* 버튼의 너비 */
+            height: auto;
             padding: 10px;
             background-color: #007bff;
             color: white;
