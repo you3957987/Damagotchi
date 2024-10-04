@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공 떨어뜨리기 게임</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            background-color: #f7fafc;
+            background-image: url('mainbackground.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .ball {
+            width: 3%; /* 공의 너비를 비율로 설정 */
+            height: auto; /* 자동으로 높이 조정 */
+            position: absolute;
+            top: 0; /* 초기 위치 */
+            left: 50%; /* 중앙에 위치 */
+            transform: translateX(-50%); /* 중앙 정렬을 위한 변환 */
+        }
+        .ball img{
+            width: 100%; /* 부모 기준으로 100% */
+            height: auto; /* 이미지 비율 유지 */
+        }
+
+        .floor {
+            width: 100%; /* 바닥의 너비 */
+            height: 10%; /* 바닥의 높이 */
+            background-image: url('floor.png'); /* 바닥 이미지 */
+            background-size: cover; /* 이미지 크기 조정 */
+            position: absolute; /* 절대 위치 지정 */
+            bottom: 0; /* 화면 하단에 위치 */
+            left: 50%; /* 중앙에 위치 */
+            transform: translateX(-50%); /* 중앙 정렬을 위한 변환 */
+        }
+
+        .player {
+            width: 6%; /* 플레이어의 너비 */
+            height: auto; /* 플레이어의 높이 */
+            position: absolute; /* 절대 위치 지정 */
+            bottom: 10%; /* 바닥에서 10% 위치 */
+            left: 50%; /* 중앙에 위치 */
+            transform: translateX(-50%); /* 중앙 정렬을 위한 변환 */
+        }
+        .player img{
+            width: 100%; /* 부모 기준으로 100% */
+            height: auto; /* 이미지 비율 유지 */
+        }
+        .hit_floor{
+            width: 100%; /* 바닥의 너비 */
+            height: 1%; /* 바닥의 높이 */
+            background-image: url('floor.png'); /* 바닥 이미지 */
+            background-size: cover; /* 이미지 크기 조정 */
+            position: absolute; /* 절대 위치 지정 */
+            bottom: 25%; /* 화면 하단에 위치 */
+            left: 50%; /* 중앙에 위치 */
+            transform: translateX(-50%); /* 중앙 정렬을 위한 변환 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ball" id = "ball">
+            <img src="ball.png" alt="ball">
+        </div>
+        <div class="floor" id="floor"></div>
+        <div class="player" id="player">
+            <img src="player.png" alt="player">
+        </div>
+        <div class="hit_floor"></div>
+    </div>
+    <script>
+        const ball = document.getElementById('ball');
+        const player = document.getElementById('player');
+        let ballPosition = 0; // 공의 초기 위치
+        const gravity = 2; // 중력 효과
+        const playerSpeed = 5; // 플레이어의 이동 속도
+        let playerPosition = window.innerWidth / 2; // 중앙 위치 보정
+        let moveLeft = false; // 왼쪽 이동 플래그
+        let moveRight = false; // 오른쪽 이동 플래그
+
+        function drop() {
+            if (ballPosition < window.innerHeight - 50) { // 바닥에 닿기 전까지
+                ballPosition += gravity; // 중력만큼 위치를 아래로 이동
+                ball.style.top = ballPosition + 'px'; // 공의 위치 업데이트
+                requestAnimationFrame(drop); // 다음 프레임 요청
+            } else {
+                // 바닥에 닿으면 애니메이션 종료
+                ballPosition = 0; // 초기 위치로 리셋
+                drop(); // 다시 떨어뜨리기
+            }
+        }
+
+        function movePlayer() {
+            if (moveLeft) {
+                playerPosition -= playerSpeed; // 왼쪽으로 이동
+                if (playerPosition < 0) playerPosition = 0; // 화면 밖으로 나가지 않도록
+            } 
+            if (moveRight) {
+                playerPosition += playerSpeed; // 오른쪽으로 이동
+                if (playerPosition > window.innerWidth) {
+                    playerPosition = window.innerWidth; // 화면 밖으로 나가지 않도록
+                }
+            }
+            player.style.left = playerPosition + 'px'; // 플레이어 위치 업데이트
+            requestAnimationFrame(movePlayer); // 다음 프레임 요청
+        }
+
+        window.addEventListener('keydown', function(event) {// 왼쪽 방향키
+            if (event.key === 'ArrowLeft') {
+                moveLeft = true; // 왼쪽 이동 시작
+            } else if (event.key === 'ArrowRight') {
+                moveRight = true; // 오른쪽 이동 시작
+            }
+        });
+
+        window.addEventListener('keyup', function(event) {//오른쪽 방향키
+            if (event.key === 'ArrowLeft') {
+                moveLeft = false; // 왼쪽 이동 중지
+            } else if (event.key === 'ArrowRight') {
+                moveRight = false; // 오른쪽 이동 중지
+            }
+        });
+
+        // 윈도우 로드 후 함수 호출
+        window.onload = function() {
+            drop(); // 공 떨어뜨리기 시작
+            movePlayer(); // 플레이어 움직임 시작
+        };
+    </script>
+</body>
+</html>
