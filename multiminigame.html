@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공 떨어뜨리기 게임</title>
+    <title>공 여러 개 떨어뜨리기 게임</title>
     <style>
         body, html {
             margin: 0;
@@ -16,11 +16,26 @@
         .container {
             width: 100%;
             height: 100%;
+            left: 0%;
+            top: 0%;
             background-color: #f7fafc;
             background-image: url('mainbackground.png');
             background-size: cover;
             background-position: center;
-            position: relative;
+            position: absolute;
+            transition: width 2s ease; /* 애니메이션 추가 */
+        }
+        .click_game_container{
+            width: 50%;
+            height: 100%;
+            left: 100%;
+            top: 0%;
+            background-color: #f7fafc;
+            background-image: url('ballgamebackground.png');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            transition: left 2s ease; /* 애니메이션 추가 */
         }
 
         .ball {
@@ -28,117 +43,253 @@
             height: auto; /* 자동으로 높이 조정 */
             position: absolute;
             top: 0; /* 초기 위치 */
-            left: 50%; /* 중앙에 위치 */
-            transform: translateX(-50%); /* 중앙 정렬을 위한 변환 */
+            transform: translateX(-50%);/* 이미지 중앙에 맞추 */
         }
-        .ball img{
-            width: 100%; /* 부모 기준으로 100% */
-            height: auto; /* 이미지 비율 유지 */
+
+        .ball img {
+            width: 100%;
+            height: auto;
         }
 
         .floor {
             width: 100%; /* 바닥의 너비 */
             height: 10%; /* 바닥의 높이 */
-            background-image: url('floor.png'); /* 바닥 이미지 */
-            background-size: cover; /* 이미지 크기 조정 */
-            position: absolute; /* 절대 위치 지정 */
-            bottom: 0; /* 화면 하단에 위치 */
-            left: 50%; /* 중앙에 위치 */
-            transform: translateX(-50%); /* 중앙 정렬을 위한 변환 */
+            background-image: url('floor.png');
+            background-size: cover;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
         }
 
         .player {
-            width: 6%; /* 플레이어의 너비 */
-            height: auto; /* 플레이어의 높이 */
-            position: absolute; /* 절대 위치 지정 */
-            bottom: 10%; /* 바닥에서 10% 위치 */
-            left: 50%; /* 중앙에 위치 */
-            transform: translateX(-50%); /* 중앙 정렬을 위한 변환 */
+            width: 6%;
+            height: auto;
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
         }
-        .player img{
-            width: 100%; /* 부모 기준으로 100% */
-            height: auto; /* 이미지 비율 유지 */
+
+        .player img {
+            width: 100%;
+            height: auto;
         }
-        .hit_floor{
-            width: 100%; /* 바닥의 너비 */
-            height: 1%; /* 바닥의 높이 */
-            background-image: url('floor.png'); /* 바닥 이미지 */
-            background-size: cover; /* 이미지 크기 조정 */
-            position: absolute; /* 절대 위치 지정 */
-            bottom: 25%; /* 화면 하단에 위치 */
-            left: 50%; /* 중앙에 위치 */
-            transform: translateX(-50%); /* 중앙 정렬을 위한 변환 */
+        .box {
+            width: 20%; /* 박스의 너비를 비율로 설정 */
+            height: auto; /* 박스의 높이를 비율로 설정 */
+            position: absolute;
+            transform: translate(-50%, -50%); /* 박스를 중앙 정렬 */
+        }
+
+        .box img {
+            width: 100%;
+            height: auto;
+
+        .timer {
+            position: absolute;
+            bottom: 10%; /* 박스의 아래쪽에서 10% 위 */
+            left: 10%; /* 박스의 왼쪽에서 10% 안쪽 */
+            transform: translate(0, 0); /* 변환을 제거하여 좌하단 정렬 */
+            font-size: 20px; /* 글자 크기 조정 */
+            color: black; /* 글자 색상 조정 */
+            font-weight: bold; /* 글자 두껍게 */
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="ball" id = "ball">
-            <img src="ball.png" alt="ball">
+    <div class="container" id="container">
+        <div class="floor" id="floor">
         </div>
-        <div class="floor" id="floor"></div>
         <div class="player" id="player">
             <img src="player.png" alt="player">
         </div>
-        <div class="hit_floor"></div>
     </div>
-    <script>
-        const ball = document.getElementById('ball');
-        const player = document.getElementById('player');
-        let ballPosition = 0; // 공의 초기 위치
-        const gravity = 2; // 중력 효과
-        const playerSpeed = 5; // 플레이어의 이동 속도
-        let playerPosition = window.innerWidth / 2; // 중앙 위치 보정
-        let moveLeft = false; // 왼쪽 이동 플래그
-        let moveRight = false; // 오른쪽 이동 플래그
 
-        function drop() {
-            if (ballPosition < window.innerHeight - 50) { // 바닥에 닿기 전까지
-                ballPosition += gravity; // 중력만큼 위치를 아래로 이동
-                ball.style.top = ballPosition + 'px'; // 공의 위치 업데이트
-                requestAnimationFrame(drop); // 다음 프레임 요청
-            } else {
-                // 바닥에 닿으면 애니메이션 종료
-                ballPosition = 0; // 초기 위치로 리셋
-                drop(); // 다시 떨어뜨리기
-            }
+     <div class="click_game_container" id="clickgame">
+    </div> 
+
+    <script>
+        let container = document.getElementById('container');
+        const player = document.getElementById('player');
+        let clickgamecontainer = document.getElementById('clickgame');
+        const gravity = 2; // 중력 효과
+        const playerSpeed = 5; // 플레이어 이동 속도
+        let playerPosition = window.innerWidth / 2; // 플레이어 초기 위치
+        let moveLeft = false;
+        let moveRight = false;
+        let isRunning = true; //요소들이 작동하게 만드는 변
+        let playerPercentPosition = 50; // 플레이어 위치를 컨테이너 기준으로 %로 저장.
+
+        const balls = [];  // 공을 담을 배열. 각 공의 정보를 객체로 저장하여 관리
+
+        // 공을 생성하는 함수
+        function createBall() {
+            const ballElement = document.createElement('div'); // 새로운 <div> 요소 생성 (공을 나타냄)
+            ballElement.classList.add('ball'); // 공에 'ball' 클래스 추가 (CSS 스타일 적용용)
+            ballElement.style.left = Math.random() * 100 + '%'; // 공을 화면의 랜덤한 가로 위치에 생성
+            ballElement.innerHTML = '<img src="ball.png" alt="ball">'; // 공의 이미지를 <img> 요소로 추가
+            container.appendChild(ballElement); // 생성된 공을 container에 추가하여 화면에 표시
+
+            // 공 객체 생성, 공의 위치와 속도 등 정보를 포함
+            const ball = {
+                element: ballElement, // 생성된 <div> 요소 (공)
+                position: 0, // 공의 초기 세로 위치 (위에서 떨어지는 시작점)
+                speed: gravity + Math.random() * 3 // 공의 속도를 중력(gravity) 값과 랜덤한 추가 속도로 설정
+            };
+
+            balls.push(ball); // 공 객체를 balls 배열에 추가 (여러 공을 관리하기 위함)
         }
 
+        // 여러 공을 동시에 떨어뜨리는 함수
+        function dropBalls() {
+            if(!isRunning) return;
+
+            balls.forEach(ball => { // 각 공을 하나씩 처리하기 위해 배열을 반복
+                const playerRect = player.getBoundingClientRect(); // 플레이어의 위치와 크기를 가져옴 (충돌 감지를 위해 사용)
+                const ballRect = ball.element.getBoundingClientRect(); // 공의 위치와 크기를 가져옴 (충돌 감지용)
+
+                // 충돌 감지: 공의 아래쪽이 플레이어의 위쪽에 닿고,
+                // 공의 좌우 측이 플레이어 범위 내에 있을 때 충돌로 판단
+                if (ballRect.bottom >= playerRect.top &&
+                    ballRect.left < playerRect.right &&
+                    ballRect.right > playerRect.left) {
+                    ball.position = 0; // 충돌이 발생하면 공의 위치를 위로 리셋 (다시 떨어뜨리기)
+                }
+
+                // 공이 바닥에 닿기 전까지 아래로 이동시키는 로직
+                if (ball.position < window.innerHeight - 50) { // 공이 화면 하단(바닥)보다 위에 있을 때
+                    ball.position += ball.speed; // 공의 세로 위치를 속도(speed)만큼 아래로 이동
+                    ball.element.style.top = ball.position + 'px'; // 공의 세로 위치를 화면에 업데이트
+                } else {
+                    ball.position = 0; // 공이 바닥에 닿으면 위치를 다시 초기화하여 위로 리셋
+                    ball.element.style.top = ball.position + 'px'; // 공의 새로운 위치를 화면에 업데이트
+                }
+            });
+
+            requestAnimationFrame(dropBalls); // 다음 프레임에 dropBalls 함수를 다시 호출 (반복 실행)
+        }
+
+
+        // 플레이어 이동
         function movePlayer() {
+
+            if(!isRunning) return // 작동 멈추는 트리거
+
+            const containerRect = container.getBoundingClientRect(); // 컨테이너의 위치와 크기 가져오기
+            const playerRect = player.getBoundingClientRect();
+
             if (moveLeft) {
                 playerPosition -= playerSpeed; // 왼쪽으로 이동
-                if (playerPosition < 0) playerPosition = 0; // 화면 밖으로 나가지 않도록
-            } 
+                if (playerPosition < containerRect.left + playerRect.width/2) {
+                    playerPosition = containerRect.left + playerRect.width/2; 
+                }
+            }// 컨테이너 왼쪽 경계선에서 멈춤
             if (moveRight) {
                 playerPosition += playerSpeed; // 오른쪽으로 이동
-                if (playerPosition > window.innerWidth) {
-                    playerPosition = window.innerWidth; // 화면 밖으로 나가지 않도록
+                if (playerPosition > containerRect.right - playerRect.width/2) {
+                    playerPosition = containerRect.right - playerRect.width/2; // 컨테이너 오른쪽 경계선에서 멈춤
                 }
             }
-            player.style.left = playerPosition + 'px'; // 플레이어 위치 업데이트
+
+            player.style.left = playerPosition + 'px'; // 플레이어 위치 업데이트 (컨테이너 기준)
+            playerPercentPosition = (playerPosition / containerRect.width) * 100; // 퍼센트로 저장
+            //console.log('debug:', container.offsetWidth);
+            //console.log(clickgamecontainer.getBoundingClientRect().left);
+            //console.log(clickgamecontainer.getBoundingClientRect().right);
             requestAnimationFrame(movePlayer); // 다음 프레임 요청
         }
 
-        window.addEventListener('keydown', function(event) {// 왼쪽 방향키
+        function createBox() { // 클릭 박스 게임 박스 생성 함수
+            console.log('1111');
+            const boxElement = document.createElement('div');
+            boxElement.classList.add('box');
+            boxElement.style.left = Math.random() * 80 + 10 + '%'; // 10%부터 90%까지
+            boxElement.style.top = Math.random() * 80 + 10 + '%'; // 10%부터 90%까지
+            boxElement.innerHTML = '<img src="box.png" alt="box">';
+            clickgamecontainer.appendChild(boxElement);
+
+            const timerElement = document.createElement('div');
+            timerElement.classList.add('timer'); // 클래스를 추가하여 스타일 적용
+            timerElement.textContent = '5'; // 초기 타이머 값 설정
+            timerElement.style.position = 'absolute'; // 절대 위치 설정
+            timerElement.style.left = boxElement.style.left; // 박스와 동일한 가로 위치
+            timerElement.style.top = boxElement.style.top; // 박스와 동일한 세로 위치
+            timerElement.style.transform = 'translate(-50%, -50%)'; // 중앙 정렬
+            clickgamecontainer.appendChild(timerElement); // 타이머를 클릭 게임 컨테이너에 추가
+
+            let countdown = 5; // 5초 카운트다운 시작
+            const timerInterval = setInterval(() => {
+                countdown--;
+                timerElement.textContent = countdown; // 타이머 업데이트
+                if (countdown <= 0) {
+                    clearInterval(timerInterval); // 타이머 중지
+                    boxElement.remove(); // 타이머가 끝나면 박스 제거
+                    timerElement.remove(); // 타이머 제거
+                }
+            }, 1000); // 1초마다 업데이트
+
+            // 박스를 클릭했을 때 처리
+            boxElement.addEventListener('click', () => {
+                clearInterval(timerInterval); // 타이머 중지
+                boxElement.remove(); // 박스 제거
+                timerElement.remove(); // 타이머 제거
+            });
+        }
+
+        function generateBoxes() {
+            setInterval(createBox, 3000); // 3초마다 박스 생성
+        }
+
+
+        // 키보드 이벤트 처리
+        window.addEventListener('keydown', function(event) {
             if (event.key === 'ArrowLeft') {
-                moveLeft = true; // 왼쪽 이동 시작
+                moveLeft = true;
             } else if (event.key === 'ArrowRight') {
-                moveRight = true; // 오른쪽 이동 시작
+                moveRight = true;
             }
         });
 
-        window.addEventListener('keyup', function(event) {//오른쪽 방향키
+        window.addEventListener('keyup', function(event) {
             if (event.key === 'ArrowLeft') {
-                moveLeft = false; // 왼쪽 이동 중지
+                moveLeft = false;
             } else if (event.key === 'ArrowRight') {
-                moveRight = false; // 오른쪽 이동 중지
+                moveRight = false;
             }
         });
+
+        function shrinkContainer() {
+            //console.log('debug1:', container.offsetWidth);
+            player.style.transition = 'left 2s ease'; // 애니메이션 설정
+            isRunning = false;
+            container.style.width = '50%'; // 너비를 50%로 줄임
+            container.style.left = '0%'; // 왼쪽에 고정
+            clickgamecontainer.style.left = '50%';
+            const newContainerWidth = Math.round(container.offsetWidth / 2); // 값 반올림. 애니메이션 실행중에는 값이 안변함
+            //console.log('debug:', newContainerWidth);
+            playerPosition = (playerPercentPosition / 100) * newContainerWidth; // 새로운 컨테이너 크기에 맞춰 위치 조정  
+            player.style.left = playerPosition + 'px'; // 플레이어 위치 업데이트
+
+             setTimeout(() => {
+                isRunning = true; // 일정 시간 후 다시 움직임을 시작
+                movePlayer(); // 플레이어 움직임 다시 시작
+                dropBalls(); // 공 떨어뜨리기 다시 시작
+                player.style.transition = 'none';
+                generateBoxes();
+            }, 2000); // 2초 후에 다시 시작
+        }
 
         // 윈도우 로드 후 함수 호출
         window.onload = function() {
-            drop(); // 공 떨어뜨리기 시작
+            // 공 여러 개 생성
+            for (let i = 0; i < 5; i++) { // 공 5개 생성
+                createBall();
+            }
+            dropBalls(); // 공 떨어뜨리기 시작
             movePlayer(); // 플레이어 움직임 시작
+            setTimeout(shrinkContainer, 5000);// 5초 뒤 화면 분할.
         };
     </script>
 </body>
