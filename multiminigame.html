@@ -274,6 +274,7 @@
 
         // 막대를 계속 이동하는 함수
         function moveRod() {
+            if(!isRunning) return;
             const rodStyle = window.getComputedStyle(rod);
             const left = parseInt(rodStyle.left, 10); // 현재 위치를 가져옵니다.
             const containerStyle = window.getComputedStyle(container);
@@ -445,6 +446,7 @@
         }
 
         function jump() {
+            if(!isRunning) return;
             if (isJumping) return; // 이미 점프 중이면 아무것도 하지 않음
 
             isJumping = true; // 점프 상태로 변경
@@ -605,9 +607,9 @@
 
             dropBalls(); // 공 떨어뜨리기 시작
             movePlayer(); // 플레이어 움직임 시작
-            setTimeout(divideContainertoClick, 1000);// 5초 뒤 화면 분할.2초는 분할하는 시간
-            setTimeout(divideContainertoThree, 4000);// 5 + 2 + 5초 뒤
-            setTimeout(divideContainertoFour, 7000);// 5 + 2 + 5 + 2 + 5초 뒤
+            setTimeout(divideContainertoClick, 7000);// 5초 뒤 화면 분할.2초는 분할하는 시간
+            setTimeout(divideContainertoThree, 7000 + 2000 + 5000);// 5 + 2 + 5초 뒤
+            setTimeout(divideContainertoFour, 7000 + 2000 + 5000 + 2000 + 5000 );// 5 + 2 + 5 + 2 + 5초 뒤
         };
     </script>
 </body>
