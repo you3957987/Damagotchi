@@ -210,7 +210,7 @@
         .brick {
             width: 7%; /* 박스의 너비를 비율로 설정 */
             height: auto; /* 박스의 높이를 비율로 설정 */
-            top: 7%; /* 화면 상단에서 5% */
+            top: 10%; /* 화면 상단에서 5% */
             left: 50%; /* 화면 가로의 중간 (50%) */
             transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
             position: absolute;
@@ -446,7 +446,7 @@
             brickSpeedY = 1.5;
 
             // brick을 중앙에 재배치
-            brick.style.top = '7%'; // 초기 위치로 brick을 이동 (상단에서 7%)
+            brick.style.top = '10%'; // 초기 위치로 brick을 이동 (상단에서 7%)
             brick.style.left = '50%'; // 화면 중앙으로 이동
             brick.style.transform = 'translate(-50%, -50%)'; // 중앙 정렬 유지
 
@@ -567,6 +567,7 @@
 
             // 박스를 클릭했을 때 처리
             boxElement.addEventListener('click', () => {
+                if(!isRunning) return;
                 clearInterval(timerInterval); // 타이머 중지
                 boxElement.remove(); // 박스 제거
                 timerElement.remove(); // 타이머 제거
@@ -578,7 +579,7 @@
                 if (isRunning) { // isRunning이 true일 때만 박스를 생성
                     createBox();
                 }
-            }, 2000); // 2초마다 실행
+            }, 3000); // 3초마다 실행
         }
 
        function jump() {

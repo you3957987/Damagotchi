@@ -14,7 +14,7 @@
     <div class="container">
         
         <div class="damagotchi" id="damagotchi">
-            <img src="damagotchi.png" alt="Damagotchi" style="max-width: 1000px;">
+            <img src="damagotchi.png" alt="Damagotchi" id = "dama_image">
         </div>
         <div class="damagotchiName" id="damagotchiName"></div>
 
@@ -46,6 +46,7 @@
 
     <script src = "textfile.js"></script>> <!--텍스트 파일 가져오기-->
     <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
+    <script src = "img_load.js"></script>> <!--이미지 파일 가져오기-->
 
     <script>
          window.onload = function() {//필수 코드!!!!!!!!
@@ -78,7 +79,7 @@
 
         // happy minigame 클릭 시 실행할 함수
         function happyMinigameClicked() {
-
+            
             window.location.href = 'happyminigame.html';
         }
 
@@ -100,8 +101,12 @@
             // 1부터 3까지 랜덤한 정수 생성
             const randomValue = Math.floor(Math.random() * 3) + 1; // 1~3랜덤값
             let talkText; // 텍스트를 저장할 변수
-            talkText = talkTexts[randomValue-1];// 파일에서 가져오는 텍스트 파일
+            talkText = talkTexts[randomValue-1];// 파일에서 가져오는 텍스트 파일. 인덱스 0~2
             document.getElementById('talkText').innerText = talkText;
+
+            const damagotchiImage = document.getElementById('dama_image'); // 다마고치 이미지 태그 가져오기
+            damagotchiImage.src = dama_images[randomValue - 1];// 이미지 로드 js 파일에 이미지 저장
+
         });// 다마고치 클릭 이벤트
 
          document.getElementById('button1').addEventListener('click', function() {

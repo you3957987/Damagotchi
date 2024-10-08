@@ -1,0 +1,1 @@
+const dama_images = ['damagotchi.png', 'damagotchi_a.png', 'damagotchi_b.png']; // 3가지 이미지 배열
