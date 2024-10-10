@@ -21,16 +21,15 @@ const dialogs = [
 // 상태 값을 받아서 텍스트를 리턴하는 함수
 function getDialogText(date, affection, trust, loyalty, rebellion) {
     // dialogs 배열을 순회하며 조건에 맞는 텍스트 찾기
-    const dialog = dialogs.find(dialog => 
-        dialog.date <= date &&
-        dialog.affection <= affection &&
-        dialog.trust <= trust &&
-        dialog.loyalty <= loyalty &&
-        dialog.rebellion >= rebellion
+    const dama_text = dialogs.find( item => 
+        item.date == date &&
+        item.affection == affection &&
+        item.trust == trust &&
+        item.loyalty == loyalty &&
+        item.rebellion == rebellion
     );
-
     // 조건에 맞는 텍스트가 있으면 반환, 없으면 기본 텍스트 반환
-    return dialog ? dialog.text : "<<Caution>> File_Load_Error:Unknown cause.To fix the error,please check the following:[1]Retry file load[2]----";
+    return dama_text ? dama_text.text : "<<Caution>> File_Load_Error:Unknown cause";
 }
 
 //const result = getDialogText(10, 75, 65, 85, 15);
