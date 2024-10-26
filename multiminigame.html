@@ -271,6 +271,30 @@
             height: auto;
             -webkit-user-drag: none; /* Chrome, Safari 및 Opera에서 드래그 방지 */
         }
+        .score_panel{
+            z-index: 50;/* 화면 거의 앞에 */
+            width: 10%; /* 박스의 너비를 비율로 설정 */
+            height: auto; /* 박스의 높이를 비율로 설정 */
+            left: 50%; /* 화면 가로의 중간 (50%) */
+            top: 10%;
+            transform: translate(-50%, -50%); /* 중앙 정렬을 위한 변환 */
+            position: fixed;
+        }
+        .score_panel img{
+            width: 100%;
+            height: auto;
+            -webkit-user-drag: none; /* Chrome, Safari 및 Opera에서 드래그 방지 */
+        }
+        .score_text {
+            position: absolute;
+            top: 55%; /* 원하는 위치 조정 */
+            left:45%;
+            width: 100%;
+            font-size: 1.5em; /* 텍스트 크기 */
+            color: black; /* 텍스트 색상 */
+            text-align: center;
+            transform: translate(-50%, -50%); /* 중앙 정렬 */
+        }
         #fade_out {
             position: fixed;
             top: 0;
@@ -298,9 +322,13 @@
 <body>
     <div id="fade_in"></div> <!-- 페이드 인 아웃 -->
     <div id="fade_out"></div> <!-- 페이드 인 아웃 -->
+    <div class = score_panel id = "score_panel">
+        <div class = score_text id = score_text>0</div>
+        <img src = "score_panel.png" alt = "score_panel">
+    </div>
     <div class="container" id="container">
         <div class="player" id="player">
-            <img src="Player.png" alt="player">
+            <img src="player.png" alt="player">
         </div>
         <div class="key_a_icon" id = "key_a_icon">
             <img src="a_icon.png" alt="a_icon">
@@ -373,6 +401,13 @@
         const brick = document.getElementById('brick');
         let brickSpeedX = 1; // brick의 X축 속도
         let brickSpeedY = 1.5; // brick의 Y축 속도
+
+        let score = 0;
+
+        function UpdateScore(newscore) {
+            score = newscore;
+            document.getElementById("score_text").innerText = score;
+        }
 
         // 막대를 계속 이동하는 함수
         function moveRod() {
@@ -534,7 +569,8 @@
                     
                         container.removeChild(ball.element); // 충돌이 발생하면 공을 제거
                         balls.splice(i, 1); // balls 배열에서 공 객체 제거
-                        createBall(); // 새로운 공 생성   
+                        createBall(); // 새로운 공 생성  
+                        UpdateScore(score+50); 
                 }
             });
 
@@ -594,7 +630,7 @@
             timerElement.style.left = `${newLeftPercent}%`;
             timerElement.style.top = `${newTopPercent}%`;
 
-            console.log(timerElement.style.left);
+            //console.log(timerElement.style.left);
             timerElement.style.transform = 'translate(-50%, -50%)'; // 중앙 정렬
             clickgamecontainer.appendChild(timerElement); // 타이머를 클릭 게임 컨테이너에 추가
 
