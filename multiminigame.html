@@ -291,6 +291,7 @@
             left:45%;
             width: 100%;
             font-size: 1.5em; /* 텍스트 크기 */
+            font-family: 'MapleStory', sans-serif;
             color: black; /* 텍스트 색상 */
             text-align: center;
             transform: translate(-50%, -50%); /* 중앙 정렬 */
@@ -316,6 +317,10 @@
             opacity: 1; /* 시작할 때는 화면이 검게 덮임 */
             transition: opacity 2s ease; /* 투명도 변화만 애니메이션 적용 */
             z-index: 9999; /* 페이지의 모든 요소 위에 나타남 */
+        }
+        @font-face {
+            font-family: 'MapleStory';
+            src: url('Maplestory.ttf') format('truetype'); /* 폰트 파일 경로 */
         }
     </style>
 </head>
