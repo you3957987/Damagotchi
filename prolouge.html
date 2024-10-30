@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Damagotchi</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            background-color: black;
+        }
+        .start_text {
+            position: absolute;
+            top: 50%;  /* 텍스트 위치 조정 (상대적으로 높임) */
+            left: 50%; /* 가로 중앙에 위치 */
+            transform: translate(-50%, -50%); /* 가로 중앙 정렬 */
+            font-size: 50px; /* 텍스트 크기 */
+            color: white;
+            text-align: center; /* 텍스트 중앙 정렬 */
+            width: 80%; /* 텍스트 영역 너비 (조정 가능) *
+        }
+    </style>
+</head>
+<body>
+    <div id="fade_out"></div> <!-- 검은색 오버레이 -->
+    <div id="fade_in"></div>
+
+    <div class="start_text" id="start_text">
+        소녀의 공간에 오신 것을 환영합니다<br><br><br>
+
+        소녀랑 놀 준비가 되셨습니까?
+    </div>
+
+   <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
+   <script>
+        function goStart(){
+            fade_out('start.html');
+        }
+
+        window.onload = function() {//필수 코드!!!!!!!!
+                setTimeout(goStart, 4000);// 4초뒤에 이름 정하는 화면으로 넘어감
+            };    
+    </script>
+</body>
+</html>

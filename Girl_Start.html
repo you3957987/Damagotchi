@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Damagotchi</title>
+    <link type="text/css" rel="stylesheet" href="dama_main_css.css">
+</head>
+<body>
+    <div id="fade_out"></div> <!-- 검은색 오버레이 -->
+
+    <!-- 전체 화면을 차지하는 컨테이너 -->
+    <div class="container">
+
+        <!-- 다마고치 이미지 (중앙에서 100픽셀 위로 위치) -->
+        <div class="damagotchi">
+            <img src="damagotchi.png" alt="Damagotchi">
+        </div>
+
+        <!-- 시작 버튼 -->
+        <button id="startButton" class="button">게임 시작</button>
+
+    </div>
+
+   <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
+
+   <script>
+    // 시작 버튼을 클릭하면 다마고치 이름을 로컬 스토리지에 저장하고 'levelone.html'로 이동
+        document.getElementById('startButton').addEventListener(
+            'click', () => {
+
+            fade_out('prolouge.html');            
+            }
+        );
+    </script>
+</body>
+</html>

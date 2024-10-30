@@ -8,6 +8,7 @@
 </head>
 <body>
     <div id="fade_out"></div> <!-- 검은색 오버레이 -->
+    <div id="fade_in"></div>
 
     <!-- 전체 화면을 차지하는 컨테이너 -->
     <div class="container">
@@ -18,7 +19,7 @@
         </div>
 
         <!-- "당신의 다마고치 이름은?" 문구 -->
-        <div class="text">당신의 다마고치 이름은?</div>
+        <div class="text">귀여운 소녀가 나타났습니다.<br>소녀의 이름을 지어주세요</div>
 
         <!-- 다마고치 이름을 입력할 필드 -->
         <input type="text" id="name" placeholder="다마고치" class="input">
@@ -39,10 +40,15 @@
             localStorage.setItem('food', 0);
             localStorage.setItem('happy', 0);// 값 초기화
             localStorage.setItem('select_button_num', 1);// 선택창 트리거 변수 저장
+            localStorage.setItem('textnum',1);
 
-            fade_out('levelone.html');             
+            fade_out('levelone.html');            
             }
         );
+
+        window.onload = function() {//필수 코드!!!!!!!!
+            fade_in();
+        };
     </script>
 </body>
 </html>

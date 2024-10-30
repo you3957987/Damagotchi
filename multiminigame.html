@@ -507,6 +507,7 @@
             // 바닥에 공이 닿았는지 체크
             if (correctedBrickTop + brickHeight >= containerHeight) {
                 resetBrick(); // 공을 초기 위치로 되돌림
+                UpdateScore(score-50); 
                 return; // 리셋 후 함수 종료하여 중복 애니메이션 방지
             }
 
@@ -657,6 +658,7 @@
                 clearInterval(timerInterval); // 타이머 중지
                 boxElement.remove(); // 박스 제거
                 timerElement.remove(); // 타이머 제거
+                UpdateScore(score+50); 
             });
         }
 
@@ -742,6 +744,7 @@
                 ) {
 
                     bombElement.remove(); // 폭탄 제거
+                    UpdateScore(score-50); 
                     return; // 충돌이 발생하면 함수 종료
                 }
 

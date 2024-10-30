@@ -58,22 +58,17 @@
         // 버튼 활성화 함수
         function activateButtons(num) {
             Number(num);// 문자열 정수로 변환
-            textnum = localStorage.getItem('textnum'); // 디폴트 1
-            Number(textnum)
             for (let i = 1; i <= 4; i++) {
                 const button = document.getElementById(`button${i}`);
                 if (button) {
                     if (i <= num) {
                         button.style.display = 'block'; // 버튼을 보이도록 설정
-                        button.innerText = selectTexts[textnum - 1]; // 각 버튼에 대한 텍스트 설정
-                        textnum++;
-                        console.log(textnum);
+                        button.innerText = selectTexts[i - 1]; // 각 버튼에 대한 텍스트 설정
                     } else {
                         button.style.display = 'none'; // 버튼을 숨김
                     }
                 }
             }
-            localStorage.setItem('textnum', textnum);// 로컬에 텍스트 넘 저장
         }
         function setSelectNum(select_num){
             Number(select_num); 
@@ -114,18 +109,18 @@
 
         });// 다마고치 클릭 이벤트
 
-         document.getElementById('button1').addEventListener('click', function() { // 1번 버튼
+         document.getElementById('button1').addEventListener('click', function() {
             setSelectNum(2);
         });
-        document.getElementById('button2').addEventListener('click', function() { // 2번 버튼
+        document.getElementById('button2').addEventListener('click', function() {
             setSelectNum(4);
         });
 
-        document.getElementById('button3').addEventListener('click', function() { // 3번 버튼
+        document.getElementById('button3').addEventListener('click', function() {
             setSelectNum(3);
 
         });
-        document.getElementById('button4').addEventListener('click', function() { // 4번 버튼
+        document.getElementById('button4').addEventListener('click', function() {
             document.getElementById('talkText').innerText = '최근에 읽은 책은 매우 흥미롭고, 다양한 주제를 다루며 독서의 즐거움을 느끼게 해 주었습니다.\n친구와 함께 여행을 가는 것은 언제나 즐거운 경험이며, 새로운 장소를 탐험하는 것이 큰 기쁨입니다.';
         });
     </script>
