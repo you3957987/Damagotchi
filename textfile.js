@@ -1,9 +1,9 @@
-const selectTexts = [
+const levelOneTexts = [
     "안녕! 나는 다마고치야.",
     "오늘 기분은 어때?",
     "나는 배가 고파!",
     "너와 함께 놀고 싶어!",
-];
+]; // 레벨 1 단계 일자진행 텍스트
 const talkTexts = [
     "응애~~",
     "밥줘~~",

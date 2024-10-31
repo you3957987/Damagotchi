@@ -48,6 +48,16 @@
     <script src = "img_load.js"></script>> <!--이미지 파일 가져오기-->
 
     <script>
+        let previousRandomValue = null; // 이전 랜덤 값을 저장할 변수
+        // 로컬 스토리지에서 이름을 가져와서 출력
+        const name = localStorage.getItem('damagotchiName') || '다마고치'; // 이름이 없으면 기본값 사용
+        document.getElementById('damagotchiName').innerText = `${name}`;
+        
+        // food와 happy 변수를 로컬 스토리지에서 가져와서 출력
+        const food = localStorage.getItem('food') || 0; // 기본값은 0
+        const happy = localStorage.getItem('happy') || 0; // 기본값은 0
+        document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
+        document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
         //로컬 값 : name, food, happy, select_button_num
          window.onload = function() {//필수 코드!!!!!!!!
             fade_in();
@@ -65,7 +75,7 @@
                 if (button) {
                     if (i <= num) {
                         button.style.display = 'block'; // 버튼을 보이도록 설정
-                        button.innerText = selectTexts[textnum - 1]; // 각 버튼에 대한 텍스트 설정
+                        button.innerText = levelOneTexts[textnum - 1]; // 각 버튼에 대한 텍스트 설정
                         textnum++;
                         console.log(textnum);
                     } else {
@@ -83,50 +93,61 @@
         function foodMinigameClicked() {
 
             //window.location.href = 'multiminigame.html';//이거 쓰는거 아님!!!!
-            fade_out('multiminigame.html');// 페이지 전환은 이걸로!!
+            fade_out('levelone_multigame.html');// 페이지 전환은 이걸로!!
         }
 
         // happy minigame 클릭 시 실행할 함수
         function happyMinigameClicked() {
             
-            window.location.href = 'happyminigame.html';
+            window.location.href = 'happyminigame.html'; // 여기에 다른 미니게임 넣을 예정
         }
-        // 로컬 스토리지에서 이름을 가져와서 출력
-        const name = localStorage.getItem('damagotchiName') || '다마고치'; // 이름이 없으면 기본값 사용
-        document.getElementById('damagotchiName').innerText = `${name}`;
         
-        // food와 happy 변수를 로컬 스토리지에서 가져와서 출력
-        const food = localStorage.getItem('food') || 0; // 기본값은 0
-        const happy = localStorage.getItem('happy') || 0; // 기본값은 0
-        document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
-        document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
-
-        // 다마고치 클릭 이벤트
         document.getElementById('damagotchi').addEventListener('click', () => {
-            // 1부터 3까지 랜덤한 정수 생성
-            const randomValue = Math.floor(Math.random() * 3) + 1; // 1~3랜덤값
+            let randomValue;
+
+            // 새로운 랜덤 값을 생성할 때까지 반복
+            do {
+                randomValue = Math.floor(Math.random() * 3) + 1; // 1~3 랜덤값 생성
+            } while (randomValue === previousRandomValue); // 이전 값과 같으면 다시 생성
+
+            previousRandomValue = randomValue; // 현재 랜덤 값을 이전 값으로 저장
+
             let talkText; // 텍스트를 저장할 변수
-            talkText = talkTexts[randomValue-1];// 파일에서 가져오는 텍스트 파일. 인덱스 0~2
+            talkText = talkTexts[randomValue - 1]; // 파일에서 가져오는 텍스트 파일. 인덱스 0~2
             document.getElementById('talkText').innerText = talkText;
 
             const damagotchiImage = document.getElementById('dama_image'); // 다마고치 이미지 태그 가져오기
-            damagotchiImage.src = dama_images[randomValue - 1];// 이미지 로드 js 파일에 이미지 저장
+            damagotchiImage.src = dama_images[randomValue - 1]; // 이미지 로드
+        });
 
-        });// 다마고치 클릭 이벤트
+        /////////////////////버튼 관리
+         document.getElementById('button1').addEventListener('click', function() { // 1번 버튼      
+            textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
-         document.getElementById('button1').addEventListener('click', function() { // 1번 버튼
-            setSelectNum(2);
+            if(textnum == 2)
+                setSelectNum(2);// 텍스트 넘은 3,4
+                document.getElementById('talkText').innerText = "저도 반가워요~~";
+                document.querySelector('.foodminigame_section').style.display = 'block'; 
+                document.querySelector('.happyminigame_section').style.display = 'block'; 
+            //else if(textnum == 4)
+
         });
         document.getElementById('button2').addEventListener('click', function() { // 2번 버튼
-            setSelectNum(4);
+            textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
+
+            //else if(textnum == 4)
+            
         });
 
         document.getElementById('button3').addEventListener('click', function() { // 3번 버튼
+            textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
+
             setSelectNum(3);
 
         });
         document.getElementById('button4').addEventListener('click', function() { // 4번 버튼
-            document.getElementById('talkText').innerText = '최근에 읽은 책은 매우 흥미롭고, 다양한 주제를 다루며 독서의 즐거움을 느끼게 해 주었습니다.\n친구와 함께 여행을 가는 것은 언제나 즐거운 경험이며, 새로운 장소를 탐험하는 것이 큰 기쁨입니다.';
+             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
+
         });
     </script>
 </body>

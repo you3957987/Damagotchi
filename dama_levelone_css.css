@@ -95,6 +95,7 @@ body, html {
             cursor: pointer; /* 손가락 커서 */
             width: 8%; /* 너비 조정 */
             height: auto; /* 높이 조정 */
+            display: none;
         }
         .happyminigame_section{
             position: absolute;
@@ -104,6 +105,7 @@ body, html {
             cursor: pointer; /* 손가락 커서 */
             width: 8%; /* 너비 조정 */
             height: auto; /* 높이 조정 */
+            display: none;
         }
         .foodminigame_section:hover,
         .happyminigame_section:hover {
