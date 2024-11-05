@@ -58,12 +58,31 @@
         const happy = localStorage.getItem('happy') || 0; // 기본값은 0
         document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
         document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
+
         //로컬 값 : name, food, happy, select_button_num
          window.onload = function() {//필수 코드!!!!!!!!
-            fade_in();
-            document.getElementById('talkText').innerText = "반가워요! 저를 어떻게 돌봐주실 건가요?";//맨 처음 대화창
-            let buttonNum = localStorage.getItem('select_button_num');
-            activateButtons(buttonNum); // 로컬 스토리지 값에 따라 버튼 활성화
+            textnum = localStorage.getItem('textnum');
+            foodgame = localStorage.getItem('foodgame');
+            happygame = localStorage.getItem('happygame');// 각각 초기값 1, 1
+            if(textnum == 1)// 게임 시작
+            {
+                fade_in();
+                document.getElementById('talkText').innerText = "반가워요! 저를 어떻게 돌봐주실 건가요?";//맨 처음 대화창
+                let buttonNum = localStorage.getItem('select_button_num');
+                activateButtons(buttonNum); // 로컬 스토리지 값에 따라 버튼 활성화
+            }
+            else if(textnum == 6)// 1번째 미니게임 클리어 후
+            {
+                fade_in();
+                document.getElementById('talkText').innerText = "너무 재미있었어요!! 빨리 다음 게임도 같이 해봐요!";// 1 게임 끝나고 대화창
+                setSelectNum(1); // 7
+            }
+            else if(textnum == 7)// 1번째 미니게임 클리어 후
+            {
+                fade_in();
+                document.getElementById('talkText').innerText = "같이 하니깐 너무 재미있었어요!!";// 게임 다 끝나고 대화창
+                setSelectNum(1); // 8
+            }
         };
         // 버튼 활성화 함수
         function activateButtons(num) {
@@ -93,12 +112,14 @@
         function foodMinigameClicked() {
 
             //window.location.href = 'multiminigame.html';//이거 쓰는거 아님!!!!
+            localStorage.setItem('foodgame',2);
             fade_out('levelone_multigame.html');// 페이지 전환은 이걸로!!
         }
 
         // happy minigame 클릭 시 실행할 함수
         function happyMinigameClicked() {
-            
+
+            localStorage.setItem('happygame',2);            
             window.location.href = 'happyminigame.html'; // 여기에 다른 미니게임 넣을 예정
         }
         
@@ -125,28 +146,128 @@
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
             if(textnum == 2)
-                setSelectNum(2);// 텍스트 넘은 3,4
-                document.getElementById('talkText').innerText = "저도 반가워요~~";
+            {
+                setSelectNum(1);// 다음텍스트 넘은 3
+                document.getElementById('talkText').innerText = "요즘 너무 지루한거 같아요....";
+                //document.querySelector('.foodminigame_section').style.display = 'block'; 
+                //document.querySelector('.happyminigame_section').style.display = 'block'; 
+            }
+            else if(textnum == 3)
+            {
+                setSelectNum(2); // 4,5
+                document.getElementById('talkText').innerText = "그럼 우리 같이 재미있는거 하면서 놀까요?";
+            }
+            else if(textnum == 5)
+            {
+                setSelectNum(1); // 6
+                document.getElementById('talkText').innerText = "당신과 함께할려고 만든 미니게임들이 있는데 같이 하실래요?";
+            }
+            else if(textnum == 6)
+            {
+                setSelectNum(0); // 선택지 없어지고 게임 아이콘 등장
+                document.getElementById('talkText').innerText = "정말요?! 너무 기뻐요. 저랑 같이 재미있게 놀아봐요!!";
                 document.querySelector('.foodminigame_section').style.display = 'block'; 
                 document.querySelector('.happyminigame_section').style.display = 'block'; 
-            //else if(textnum == 4)
+            }
+            else if(textnum == 7)
+            {
+                setSelectNum(0); // 선택지 없어지고 게임 아이콘 등장
+                foodgame = localStorage.getItem('foodgame');
+                happygame = localStorage.getItem('happygame');
+
+                if( foodgame == 2 && happygame == 1 ) // 처음에 food 선택
+                {
+                    document.querySelector('.happyminigame_section').style.display = 'block';
+                }
+                else if( foodgame == 1 && happygame == 2) // 처음에 happy 선택
+                {
+                    document.querySelector('.foodminigame_section').style.display = 'block'; 
+                }
+            }
+            else if(textnum == 8)
+            {
+                setSelectNum(2); // 9,10
+                document.getElementById('talkText').innerText = "후.. 너무 열심히 놀았더니 힘드네요.. 조금 쉬어야 할 것 같아요!";
+            }
+            else if(textnum == 10)// 먹이 주기 선택지
+            {
+                setSelectNum(2); // 11,12
+                document.getElementById('talkText').innerText = "마침 배고팠는데 좋아요!!";
+            }
+            else if(textnum == 12) // 과자 주기
+            {
+                document.getElementById('talkText').innerText = "저도 달달한게 먹고싶었는데 저희는 서로 통하는게 있나봐요!!"; // 다음 텍스트 넘은 13
+                localStorage.setItem('textnum', 13);// 로컬에 텍스트 넘 저장 다음 텍스트 넘은 13
+                setSelectNum(1); // 13텍스트가 출력되고 텍스트 넘은 14가 됨
+            }
+            else if(textnum == 13)// 다음에도 같이 놀자 다음 선택지
+            {
+                document.getElementById('talkText').innerText = "저희는 서로 통하는 게 있는것 같아요!"; // 다음 텍스트 넘은 13
+                localStorage.setItem('textnum', 13);// 로컬에 텍스트 넘 저장 다음 텍스트 넘은 13
+                setSelectNum(1); // 13텍스트가 출력되고 텍스트 넘은 14가 됨
+            }
+            else if(textnum == 14)// 중간기 넘어가는 과도기 시작
+            {
+                document.getElementById('talkText').innerText = "이제 조금 더 자라서 새로운 것들을 경험하고 싶어요. 이제 제가 성장하고 있다는 느낌이 들어요! 어떻게 생각하시나요??";
+                setSelectNum(2); //15,16
+            }
+            else if(textnum == 16) // 다시 미니게임으로 돌아가기
+            {
+                document.getElementById('talkText').innerText = "아 그럼 조금 더 놀아야 할 것 같아요! 조금더 같이 놀아요!";
+                setSelectNum(1);// 17번째 텍스트 출력
+                localStorage.setItem('foodgame',1);
+                localStorage.setItem('happygame',1);
+            }
+            else if(textnum == 17)
+            {
+                document.getElementById('talkText').innerText = "흠.. 다시 또 지루해진 것 같아요..";
+                localStorage.setItem('textnum', 2);// 로컬에 텍스트 넘 저장 다음 텍스트 넘은 14
+                setSelectNum(1);
+            }
+            else if(textnum == 20)
+            {
+                // 중간기 넘어가는 fade_out 넣기
+            }
 
         });
         document.getElementById('button2').addEventListener('click', function() { // 2번 버튼
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
-            //else if(textnum == 4)
+            if(textnum == 5)
+            {
+                setSelectNum(1); // 6
+                document.getElementById('talkText').innerText = "여기서는 매일 같은 일이 반복되나깐요... 저랑 같이 미니게임 하면서 놀아주실 수 있나요?";
+            }
+            else if(textnum == 10) // 칭찬하기 선택지
+            {
+                localStorage.setItem('textnum', 12);// 로컬에 텍스트 넘 저장
+                setSelectNum(1); // 13텍스트가 출력되고 텍스트 넘은 14가 됨
+                document.getElementById('talkText').innerText = "정말요? 칭찬받으니깐 기쁘네요!. 다음에도 같이 놀아주실 꺼죠?";
+            }
+            else if(textnum == 12) // 과일 주기
+            {
+                document.getElementById('talkText').innerText = "저도 상큼한게 먹고싶었는데 저희는 서로 통하는게 있나봐요!!"; // 다음 텍스트 넘은 13
+                localStorage.setItem('textnum', 13);// 로컬에 텍스트 넘 저장 다음 텍스트 넘은 14
+                setSelectNum(1); // 13텍스트가 출력되고 텍스트 넘은 14가 됨
+            }
+            else if(textnum == 16)// 중간기로 넘어가기
+            {
+                document.getElementById('talkText').innerText = "정말요? 그럼 저를 더욱 잘 돌봐주세요! 이제 새로운 것을 배우고 싶어요!";
+                localStorage.setItem('textnum', 19);// 로컬에 텍스트 넘 저장 다음 텍스트 넘은 14
+                setSelectNum(1); // 19 번째 텍스트 출력후 텍스트 넘은 20
+            }
+
             
         });
 
         document.getElementById('button3').addEventListener('click', function() { // 3번 버튼
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
-            setSelectNum(3);
-
         });
         document.getElementById('button4').addEventListener('click', function() { // 4번 버튼
              textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
+
+
 
         });
     </script>
