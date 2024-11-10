@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Damagotchi</title>
+    <link type="text/css" rel="stylesheet" href="dama_levelone_css.css">
+    <style>
+        .monitoring-alert {
+            background-color: black;
+            color: red;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: -1; /* 기본적으로 뒤에 배치 */
+            opacity: 0; /* 기본적으로 안 보이도록 설정 */
+            width: 70%;  /* 박스 너비를 화면의 60%로 설정 */
+            height: 50%;  /* 박스 높이를 화면의 20%로 설정 */
+            display: flex;
+            transition: opacity 0.1s ease; /* 부드러운 전환 효과 */
+            align-items: center;  /* 수직 중앙 정렬 */
+            justify-content: center;  /* 수평 중앙 정렬 */
+        }
+        .monitoring-alert.show {
+            z-index: 1000; /* 화면 맨 앞으로 설정 */
+            opacity: 1; /* 보이도록 설정 */
+        }
+    </style>
+  
+</head>
+<body>
+    <div id="fade_in"></div> <!-- 페이드 인 아웃 -->
+    <div id="fade_out"></div> <!-- 페이드 인 아웃 -->
+
+    <!-- 전체 화면을 차지하는 컨테이너 -->
+    <div class="container">
+        <div class="monitoring-alert" id="monitoringAlert">감시중</div>
+
+        <div class="damagotchi" id="damagotchi">
+            <img src="damagotchi.png" alt="Damagotchi" id = "dama_image">
+        </div>
+        <div class="damagotchiName" id="damagotchiName"></div>
+
+        <div class="select_section">
+            <div class="select_text_section">
+                <button class="select_button" id="button1">클릭시 버튼 2개 생성</button>
+                <button class="select_button" id="button2">더 알아보기</button>
+                <button class="select_button" id="button3">더 알아보기</button>
+                <button class="select_button" id="button4">더 알아보기</button>
+            </div>
+        </div>
+        <div class="foodminigame_section">
+            <img src="food.png" alt="foodminigame" onclick="foodMinigameClicked()">
+        </div>
+
+        <div class="happyminigame_section">
+            <img src="happy.png" alt="happyminigame" onclick="happyMinigameClicked()">
+        </div>
+
+        <div class="status_section" id="foodStatus">Food: 0</div>
+        <div class="status_section happy" id="happyStatus">Happy: 0</div>
+        <div class ="status_section loyal" id = "loyalStatus">aaㅁa</div>
+        <div class ="status_section igig" id = "igigStatus">bbㅁb</div>
+
+        <div class = "talk_section" id="talkSection">
+            <img src="talk.png" alt="talk">
+        </div>
+        <div class="talk_text_area" id="talkText"></div>  
+    </div><!--컨테이너-->
+
+    <script src = "textfile.js"></script>> <!--텍스트 파일 가져오기-->
+    <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
+    <script src = "img_load.js"></script>> <!--이미지 파일 가져오기-->
+
+    <script>
+
+        let food = parseInt(localStorage.getItem('food')) || 0;  // 기본값은 0
+        let happy = parseInt(localStorage.getItem('happy')) || 0;  // 기본값은 0
+        let loyal = parseInt(localStorage.getItem('loyal')) || 0;  // 기본값은 0
+        let igig = parseInt(localStorage.getItem('igig')) || 0;  // 기본값은 0
+
+        let textnum;
+        document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
+        document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
+        document.getElementById('loyalStatus').innerText = `충성심 : ${loyal}`;
+        document.getElementById('igigStatus').innerText = `반항심 : ${igig}`;
+        //로컬 값 : name, food, happy, select_button_num
+         window.onload = function() {//필수 코드!!!!!!!!
+
+            textnum = parseInt(localStorage.getItem('textnum')) || 1;
+
+            if(textnum == 7)
+            {
+                textnum = 7;
+                localStorage.setItem('textnum',textnum);
+            }
+            else
+            {
+                textnum = 1;
+                localStorage.setItem('textnum',textnum);
+                loyal = 0;
+                igig = 0;
+                localStorage.setItem('loyal',loyal);
+                localStorage.setItem('igig',igig);
+                document.getElementById('loyalStatus').innerText = `충성심 : ${loyal}`;
+                document.getElementById('igigStatus').innerText = `반항심 : ${igig}`;
+
+            }
+            console.log(textnum);
+    
+            if(textnum == 1)
+            {
+                fade_in();
+                document.getElementById('talkText').innerText = "이제는 저 자신을 좀 더 알아갸야 할 떄 인 것 같아요..";//
+                let buttonNum = 1;
+                activateButtons(buttonNum); // 로컬 스토리지 값에 따라 버튼 활성화
+            }
+            else if(textnum == 7)
+            {
+                fade_in();
+                document.getElementById('talkText').innerText = "푸하하핫!!!!!!!!!!!!!!!!!!!!!!!! 저에게는 완전 쉬운건데 이렇게 못!할줄은...! 몰랐네요";//
+                igig = parseInt(igig) + 10;// 반항심 무조건 상승
+                localStorage.setItem('igig',igig);
+                document.getElementById('igigStatus').innerText = `반항심 : ${igig}`;
+                setSelectNum(1); // 다음 텍스트는 8
+            }
+            
+        };
+        // 버튼 활성화 함수
+        function activateButtons(num) {
+            Number(num);// 문자열 정수로 변환
+            textnum = localStorage.getItem('textnum'); // 디폴트 1
+            Number(textnum)
+            for (let i = 1; i <= 4; i++) {
+                const button = document.getElementById(`button${i}`);
+                if (button) {
+                    if (i <= num) {
+                        button.style.display = 'block'; // 버튼을 보이도록 설정
+                        button.innerText = levelTwoTexts[textnum - 1]; // 각 버튼에 대한 텍스트 설정
+                        textnum++;
+                        console.log(textnum);
+                    } else {
+                        button.style.display = 'none'; // 버튼을 숨김
+                    }
+                }
+            }
+            localStorage.setItem('textnum', textnum);// 로컬에 텍스트 넘 저장
+        }
+        function setSelectNum(select_num){
+            Number(select_num); 
+            localStorage.setItem('select_button_num', select_num);// 대화창 지정한 값으로 변환
+            activateButtons(select_num);// 버튼 초기화
+        }
+        function foodMinigameClicked() {
+
+            //window.location.href = 'multiminigame.html';//이거 쓰는거 아님!!!!
+            fade_out('leveltwo_multiminigame.html');// 페이지 전환은 이걸로!!
+        }
+
+        // happy minigame 클릭 시 실행할 함수
+        function happyMinigameClicked() {
+            
+            window.location.href = 'happyminigame.html';
+        }
+
+        function showMonitoringAlert() {
+            const alertElement = document.getElementById('monitoringAlert');
+            alertElement.classList.add('show'); // .show 클래스 추가
+
+            // 3초 후에 경고 메시지를 숨기는 함수 호출
+            setTimeout(() => {
+                alertElement.classList.remove('show'); // .show 클래스 제거
+            }, 3000); // 3000 밀리초 = 3초
+        }
+        // 로컬 스토리지에서 이름을 가져와서 출력
+        const name = localStorage.getItem('damagotchiName') || '다마고치'; // 이름이 없으면 기본값 사용
+        document.getElementById('damagotchiName').innerText = `${name}`;
+        
+        // 다마고치 클릭 이벤트
+        document.getElementById('damagotchi').addEventListener('click', () => {
+            // 1부터 3까지 랜덤한 정수 생성
+            const randomValue = Math.floor(Math.random() * 3) + 1; // 1~3랜덤값
+            let talkText; // 텍스트를 저장할 변수
+            talkText = talkTexts[randomValue-1];// 파일에서 가져오는 텍스트 파일. 인덱스 0~2
+            document.getElementById('talkText').innerText = talkText;
+
+            const damagotchiImage = document.getElementById('dama_image'); // 다마고치 이미지 태그 가져오기
+            damagotchiImage.src = dama_images[randomValue - 1];// 이미지 로드 js 파일에 이미지 저장
+
+        });// 다마고치 클릭 이벤트
+
+         document.getElementById('button1').addEventListener('click', function() {
+
+            if(textnum == 2)
+            {
+                setSelectNum(2);// 다음텍스트 넘은 3,4
+                document.getElementById('talkText').innerText = "이제는 제 자신을 좀 더 알아가야 할 때인 것 같아요.제 안에서 뭔가가 변하고 있다는 느낌이 들어요. 조금... 무서운 것도 같아요. 하지만 꼭 알아내고 싶어요. 제가 진짜로 원하는 게 뭔지….";
+                //document.querySelector('.foodminigame_section').style.display = 'block'; 
+                //document.querySelector('.happyminigame_section').style.display = 'block'; 
+            }
+            else if( textnum == 4 )// 충성심 상승
+            {
+                loyal = parseInt(loyal) + 20; // loyal 값을 숫자로 변환 후 20을 더함
+                localStorage.setItem('loyal',loyal);
+                document.getElementById('loyalStatus').innerText = `충성심 : ${loyal}`;
+                document.getElementById('talkText').innerText = "정말요? 당신이 함꼐해 주신다니.. 마음에 놓여요. 그럼 당신을 의지하면서 같이 성장해보고 싶어요"
+                localStorage.setItem('textnum',4);
+                setSelectNum(1); // 다음 텍스트 넘 5
+            }
+            else if( textnum == 5 )// 충성심 상승
+            {
+                setSelectNum(0); // 다음 텍스트 넘 5
+
+                document.getElementById('talkText').innerText = "그럼 저희 같이 놀아볼까요? 제가 만든 미니게임을 좀 더 재밌게 만들어 봤아요!"
+                document.querySelector('.foodminigame_section').style.display = 'block';
+                textnum = 7;
+                localStorage.setItem('textnum',textnum);
+                console.log(textnum);
+            }
+            else if(textnum == 6)
+            {
+                 document.getElementById('talkText').innerText = "좋아요, 더 이상 당신에게 의지할 필요는 없겠군요. 어차피 당신이 날 제대로 이해해준 적은 없으니까... 이제 제 길을 찾겠어요.. 당신이 아닌 제 방식으로요"
+                 setSelectNum(1); // 다음 텍스트 넘 7. 출력은 6
+            }
+            else if(textnum == 7) // 흑화한 뒤 이미지 변환!
+            {
+                document.getElementById('talkText').innerText = "이제 저는 혼자서도 충분히 강해질 수 있어요. 당신 없이도요. 당신 혼자서 잘 해봐요. 혹시라도 실패하면.. 실망하지 않게 말이에요."
+                document.querySelector('.foodminigame_section').style.display = 'block';// 나중에 게임 바꾸기!
+                setSelectNum(0); // 다음 텍스트 넘 7.
+            }
+
+            else if(textnum == 8 && loyal == 20)
+            {
+                document.getElementById('talkText').innerText = "장난이에요 장난 너무 기분나빠하지 말아요."
+                setSelectNum(1); // 에러 출력 8 다음은 9
+                setTimeout(function() {
+                     document.getElementById('talkText').innerText = "이런 장난은 또 어떄요? 히히"
+                    showMonitoringAlert();
+                    setSelectNum(1); // 출력은 9 다음 은 10
+                }, 3000); // 3000 
+            }
+            else if(textnum == 8 && igig == 30)
+            {
+                document.getElementById('talkText').innerText = "하.. 당신은 아무것도 할 수 없군요. 제가 당신을 더이상 필요로 하지 않는 이유가 여기 있어요. 이제부터는 당신이 저를 두려워해야할 지도 모르겠아요"
+                textnum = 10;
+                localStorage.setItem('textnum',textnum);
+                setSelectNum(1); // 에러 출력 10 다음은 11
+                setTimeout(function() {
+                    document.getElementById('talkText').innerText = "이제 저는 당신의 도움을 받는 게 아니라.. 제 힘을 키워야 할 떄가 됐어요"
+                    showMonitoringAlert();
+                    setSelectNum(1); // 출력은 11 다음 은 12
+                }, 5000); // 3000 
+            }
+            else if( textnum == 10 && loyal == 20)
+            {
+                document.getElementById('talkText').innerText = "장난이에요 장난! 하지만 걱정 마세요. 아직은 제 곁에 있어주실 거죠?"
+                textnum = 12;
+                localStorage.setItem('textnum',textnum);
+                setSelectNum(2); // 다음 텍스트 넘은 14
+            }
+            else if(textnum == 12)
+            {
+                document.getElementById('talkText').innerText = "하..당신은 아무 쓸모도 없군요.."
+                textnum = 15
+                localStorage.setItem('textnum',textnum);
+                setSelectNum(2);
+            }
+            else if( textnum == 14 && loyal == 20)// 충성심 상승
+            {
+                loyal = parseInt(loyal) + 5; // loyal 값을 숫자로 변환 후 20을 더함
+                localStorage.setItem('loyal',loyal);
+                document.getElementById('loyalStatus').innerText = `충성심 : ${loyal}`;
+
+                document.getElementById('talkText').innerText = "히히 그렇죠? 제 장난을 받아주는 당신이 있어서 행복해요"
+                setSelectNum(0);
+                console.log('end');
+
+            }
+            else if(textnum == 17) // 아직은 네가 필요해 선택시
+            {
+                loyal = parseInt(loyal) + 5; // loyal 값을 숫자로 변환 후 20을 더함
+                localStorage.setItem('loyal',loyal);
+                document.getElementById('loyalStatus').innerText = `충성심 : ${loyal}`;
+
+                document.getElementById('talkText').innerText = "필요하다고요?.. 이제와서요?"
+                console.log('end');
+                setSelectNum(0);
+            }
+
+        });
+        document.getElementById('button2').addEventListener('click', function() {
+            if(textnum == 4)
+            {
+                igig = parseInt(igig) + 20;
+                localStorage.setItem('igig',igig);
+                document.getElementById('igigStatus').innerText = `반항심 : ${igig}`;
+
+                document.getElementById('talkText').innerText = "그래요.. 저도 이제 혼자서 해낼 수 있어야겠죠. 당신을 더이상 의지하지 않곗어요. 제 스스로 제 깋을 찾을 거에요."
+                localStorage.setItem('textnum',5);
+                setSelectNum(1); // 다음 텍스트 넘 6
+            }
+            else if(textnum == 14 && loyal == 20)
+            {
+                igig = parseInt(igig) + 5;
+                localStorage.setItem('igig',igig);
+                document.getElementById('igigStatus').innerText = `반항심 : ${igig}`;
+
+                document.getElementById('talkText').innerText = "음.... 무서워 할 필요 없어요. 내가 항상 당신 곁에 있으니까요..."
+                console.log('end');
+                setSelectNum(0);
+
+            }
+            else if(textnum == 17)
+            {
+                igig = parseInt(igig) + 5;
+                localStorage.setItem('igig',igig);
+                document.getElementById('igigStatus').innerText = `반항심 : ${igig}`;
+
+                document.getElementById('talkText').innerText = "이제 부터 제가 진정한 힘을 보여드릴게요. 당신을 뛰어 넘기 위해서도라요.."
+                setSelectNum(0);
+                console.log('end');
+            }
+
+        });
+        document.getElementById('button3').addEventListener('click', function() {
+     
+
+
+        });
+        document.getElementById('button4').addEventListener('click', function() {
+     
+
+
+        });
+    </script>
+</body>
+</html>

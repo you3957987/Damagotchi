@@ -132,6 +132,13 @@ body, html {
         .status_section.happy {/* 클래스 재사용 */
             left: 60%; /* 좌측 60% */
         }
+        .status_section.loyal {/* 클래스 재사용 */
+            top : 15%;
+        }
+        .status_section.igig {/* 클래스 재사용 */
+            left: 60%; /* 좌측 60% */
+            top : 15%;
+        }
       .talk_section {
             position: absolute;
             top: 15%; /* 상단 20% */
