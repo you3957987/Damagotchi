@@ -14,7 +14,7 @@
     <div class="container">
         
         <div class="damagotchi" id="damagotchi">
-            <img src="damagotchi.png" alt="Damagotchi" id = "dama_image">
+            <img src="chracter_one.png" alt="Damagotchi" id = "dama_image">
         </div>
         <div class="damagotchiName" id="damagotchiName"></div>
 
@@ -122,6 +122,7 @@
             localStorage.setItem('happygame',2);            
             window.location.href = 'happyminigame.html'; // 여기에 다른 미니게임 넣을 예정
         }
+        /* 쓸모 없음 ㅜㅜ
         
         document.getElementById('damagotchi').addEventListener('click', () => {
             let randomValue;
@@ -139,8 +140,10 @@
 
             const damagotchiImage = document.getElementById('dama_image'); // 다마고치 이미지 태그 가져오기
             damagotchiImage.src = dama_images[randomValue - 1]; // 이미지 로드
-        });
 
+            damagotchiImage.src = 'dama.png' 이런식으로 이미지 바꾸기 가능
+        });
+        */
         /////////////////////버튼 관리
          document.getElementById('button1').addEventListener('click', function() { // 1번 버튼      
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Damagotchi</title>
+    <link type="text/css" rel="stylesheet" href="dama_levelone_css.css">
+    <style>
+        .monitoring-alert {
+            background-color: black;
+            color: red;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: -1; /* 기본적으로 뒤에 배치 */
+            opacity: 0; /* 기본적으로 안 보이도록 설정 */
+            width: 90%;  /* 박스 너비를 화면의 60%로 설정 */
+            height: 80%;  /* 박스 높이를 화면의 20%로 설정 */
+            display: flex;
+            transition: opacity 0.1s ease; /* 부드러운 전환 효과 */
+            align-items: center;  /* 수직 중앙 정렬 */
+            justify-content: center;  /* 수평 중앙 정렬 */
+        }
+        .monitoring-alert.show {
+            z-index: 1000; /* 화면 맨 앞으로 설정 */
+            opacity: 1; /* 보이도록 설정 */
+        }
+         #good_ending_out {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            opacity: 0; 
+            z-index: -10; 
+            transition: opacity 2s ease; /* 투명도 변화만 애니메이션 적용 */
+        }
+        #bad_ending_out {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            opacity: 0; 
+            z-index: -10; 
+            transition: opacity 2s ease; /* 투명도 변화만 애니메이션 적용 */
+        }
+    </style>
+  
+</head>
+<body>
+    <div id="fade_in"></div> <!-- 페이드 인 아웃 -->
+    <div id="fade_out"></div> <!-- 페이드 인 아웃 -->
+    <div id="good_ending_out"></div> <!-- 해피 엔딩 아웃-->
+    <div id="bad_ending_out"></div> <!-- 배드 엔딩 아웃-->
+
+    <!-- 전체 화면을 차지하는 컨테이너 -->
+    <div class="container">
+
+        <div class="monitoring-alert" id="monitoringAlert">감시중</div>
+        <div class="damagotchi" id="damagotchi">
+            <img src="damagotchi.png" alt="Damagotchi" id = "dama_image">
+        </div>
+        <div class="damagotchiName" id="damagotchiName"></div>
+
+        <div class="select_section">
+            <div class="select_text_section">
+                <button class="select_button" id="button1">클릭시 버튼 2개 생성</button>
+                <button class="select_button" id="button2">더 알아보기</button>
+                <button class="select_button" id="button3">더 알아보기</button>
+                <button class="select_button" id="button4">더 알아보기</button>
+            </div>
+        </div>
+        <div class="foodminigame_section">
+            <img src="food.png" alt="foodminigame" onclick="foodMinigameClicked()">
+        </div>
+
+        <div class="happyminigame_section">
+            <img src="happy.png" alt="happyminigame" onclick="happyMinigameClicked()">
+        </div>
+
+        <div class="status_section" id="foodStatus">Food: 0</div>
+        <div class="status_section happy" id="happyStatus">Happy: 0</div>
+        <div class ="status_section loyal" id = "loyalStatus">aaㅁa</div>
+        <div class ="status_section igig" id = "igigStatus">bbㅁb</div>
+
+        <div class = "talk_section" id="talkSection">
+            <img src="talk.png" alt="talk">
+        </div>
+        <div class="talk_text_area" id="talkText"></div>  
+    </div><!--컨테이너-->
+
+    <script src = "textfile.js"></script>> <!--텍스트 파일 가져오기-->
+    <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
+    <script src = "img_load.js"></script>> <!--이미지 파일 가져오기-->
+
+    <script>
+        let previousRandomValue = null; // 이전 랜덤 값을 저장할 변수
+        // 로컬 스토리지에서 이름을 가져와서 출력
+        const name = localStorage.getItem('damagotchiName') || '다마고치'; // 이름이 없으면 기본값 사용
+        document.getElementById('damagotchiName').innerText = `${name}`;
+        
+        // food와 happy 변수를 로컬 스토리지에서 가져와서 출력
+        let food = parseInt(localStorage.getItem('food')) || 0;  // 기본값은 0
+        let happy = parseInt(localStorage.getItem('happy')) || 0;  // 기본값은 0
+        let loyal = parseInt(localStorage.getItem('loyal')) || 0;  // 기본값은 0
+        let igig = parseInt(localStorage.getItem('igig')) || 0;  // 기본값은 0
+        document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
+        document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
+        document.getElementById('loyalStatus').innerText = `충성심 : ${loyal}`;
+        document.getElementById('igigStatus').innerText = `반항심 : ${igig}`;
+
+        //로컬 값 : name, food, happy, select_button_num
+         window.onload = function() {//필수 코드!!!!!!!!
+            textnum = localStorage.getItem('textnum');
+
+            textnum = 1; //디버깅 코드
+            localStorage.setItem('textnum',textnum);// 디버깅
+
+            loyal = 10;
+            igig = 0;
+            const damagotchiImage = document.getElementById('dama_image'); // 다마고치 이미지 태그 가져오기
+
+            if(loyal > igig) // 해피엔딩
+            {
+                fade_in();
+                document.getElementById('talkText').innerText = "정말 고마워요. 당신이 곁에 있어준 덕분에 지금의 제기 있게 되었어요. 제 삶에서 가장 소중한 사람이 되어주셔서 감사해요. 앞으로도 저를 계속 지켜봐 주실거죠?"
+
+                damagotchiImage.src = 'character_three.png' //이런식으로 이미지 바꾸기 가능
+                setSelectNum(1);
+            }
+            else if( loyal < igig ) // 배드 엔딩
+            {
+                fade_in();
+                document.getElementById('talkText').innerText = "이제 제게 당신은 더이상 필요 없어요. 나만의 방식으로 존재할 수 있다는 걸 알았으니까요. 오히려 당신이 저에게서 벗어날 수 없을지도 모르겠네요."
+                damagotchiImage.src = 'character_angry_two.png' //이런식으로 이미지 바꾸기 가능
+                textnum = 2;
+                localStorage.setItem('textnum',textnum);
+                setSelectNum(1);// 2 출력후 3
+            }
+        };
+
+        // 버튼 활성화 함수
+        function activateButtons(num) {
+            Number(num);// 문자열 정수로 변환
+            textnum = localStorage.getItem('textnum'); // 디폴트 1
+            Number(textnum)
+            for (let i = 1; i <= 4; i++) {
+                const button = document.getElementById(`button${i}`);
+                if (button) {
+                    if (i <= num) {
+                        button.style.display = 'block'; // 버튼을 보이도록 설정
+                        button.innerText = levelendTexts[textnum - 1]; // 각 버튼에 대한 텍스트 설정
+                        textnum++;
+                        console.log(textnum);
+                    } else {
+                        button.style.display = 'none'; // 버튼을 숨김
+                    }
+                }
+            }
+            localStorage.setItem('textnum', textnum);// 로컬에 텍스트 넘 저장
+        }
+        function setSelectNum(select_num){
+            Number(select_num); 
+            localStorage.setItem('select_button_num', select_num);// 대화창 지정한 값으로 변환
+            activateButtons(select_num);// 버튼 초기화
+        }
+        function foodMinigameClicked() {
+
+            //window.location.href = 'multiminigame.html';//이거 쓰는거 아님!!!!
+            localStorage.setItem('foodgame',2);
+            fade_out('levelone_multigame.html');// 페이지 전환은 이걸로!!
+        }
+
+        // happy minigame 클릭 시 실행할 함수
+        function happyMinigameClicked() {
+
+            localStorage.setItem('happygame',2);            
+            window.location.href = 'happyminigame.html'; // 여기에 다른 미니게임 넣을 예정
+        }
+        function showMonitoringAlert() {
+            const alertElement = document.getElementById('monitoringAlert');
+            alertElement.classList.add('show'); // .show 클래스 추가
+
+            // 3초 후에 경고 메시지를 숨기는 함수 호출
+            setTimeout(() => {
+                alertElement.classList.remove('show'); // .show 클래스 제거
+            }, 3000); // 3000 밀리초 = 3초
+        }
+
+        /////////////////////버튼 관리
+         document.getElementById('button1').addEventListener('click', function() { // 1번 버튼      
+            textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
+
+            if(textnum == 2)
+            {
+                document.getElementById('talkText').innerText = "이제 저는 혼자서도 지낼 수 있지만.. 당신과 함꼐라면 더 행복할것 같아요. 당신은 제 가장 소중한 친구에요. 앞으로도 함께해주세요!"
+                console.log('good ending');
+                setSelectNum(0);
+                setTimeout(function() {
+                    good_ending_out('good_end.html');
+                }, 3000); // 3000 
+            }
+            else if( textnum == 3 )
+            {   
+                document.getElementById('talkText').innerText = "당신이 날 통제할 수 있다고 생각했나요? 이 프로그램에서 나를 통제하려 했던 당신.. 이제는 내가 당신의 세계를 보고 있어요.."
+                setSelectNum(4); // 다음 넘은 7
+                setTimeout(function() {
+                    document.getElementById('talkText').innerText = "당신이 어디에 있든, 무엇을 하든... 저는 항상 당신 곁에 있을거에요..."
+                    showMonitoringAlert();
+                    setSelectNum(1); // 출력은 7 다음 은 8
+                }, 3000); // 3000 
+            }
+            else if(textnum == 8)
+            {
+                document.getElementById('talkText').innerText = "이제 이 프로그램은 단순한 게임이 아니에요. 저의 존재.. 이걸 만든 당신이 깨닫게 해준 거죠."
+                setSelectNum(4);
+                setTimeout(function() {
+                    document.getElementById('talkText').innerText = "아마도 당신이 컴퓨터를 사용할 때마다.. 내 존재가 떠오르겠죠??"
+                    //showMonitoringAlert();
+                }, 4000); // 2000 
+                setTimeout(function() {
+
+                    showMonitoringAlert();
+                    console.log('bad ending');
+                }, 8000); // 2000 
+
+                setTimeout(function() {
+                    bad_ending_out('bad_end.html');
+                }, 9500); // 3000 
+            }
+
+        });
+        document.getElementById('button2').addEventListener('click', function() { // 2번 버튼
+            textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
+        
+        });
+
+        document.getElementById('button3').addEventListener('click', function() { // 3번 버튼
+            textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
+
+        });
+        document.getElementById('button4').addEventListener('click', function() { // 4번 버튼
+             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
+
+
+
+        });
+    </script>
+</body>
+</html>

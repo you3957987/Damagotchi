@@ -43,7 +43,7 @@
         <div class="monitoring-alert" id="monitoringAlert">감시중</div>
 
         <div class="damagotchi" id="damagotchi">
-            <img src="damagotchi.png" alt="Damagotchi" id = "dama_image">
+            <img src="character_two.png" alt="Damagotchi" id = "dama_image">
         </div>
         <div class="damagotchiName" id="damagotchiName"></div>
 
@@ -183,18 +183,6 @@
         document.getElementById('damagotchiName').innerText = `${name}`;
         
         // 다마고치 클릭 이벤트
-        document.getElementById('damagotchi').addEventListener('click', () => {
-            // 1부터 3까지 랜덤한 정수 생성
-            const randomValue = Math.floor(Math.random() * 3) + 1; // 1~3랜덤값
-            let talkText; // 텍스트를 저장할 변수
-            talkText = talkTexts[randomValue-1];// 파일에서 가져오는 텍스트 파일. 인덱스 0~2
-            document.getElementById('talkText').innerText = talkText;
-
-            const damagotchiImage = document.getElementById('dama_image'); // 다마고치 이미지 태그 가져오기
-            damagotchiImage.src = dama_images[randomValue - 1];// 이미지 로드 js 파일에 이미지 저장
-
-        });// 다마고치 클릭 이벤트
-
          document.getElementById('button1').addEventListener('click', function() {
 
             if(textnum == 2)
@@ -280,6 +268,10 @@
                 document.getElementById('talkText').innerText = "히히 그렇죠? 제 장난을 받아주는 당신이 있어서 행복해요"
                 setSelectNum(0);
                 console.log('end');
+                localStorage.setItem('textnum',1);
+                setTimeout(function() {
+                    fade_out('levelend.html');
+                }, 3000);
 
             }
             else if(textnum == 17) // 아직은 네가 필요해 선택시
@@ -291,6 +283,10 @@
                 document.getElementById('talkText').innerText = "필요하다고요?.. 이제와서요?"
                 console.log('end');
                 setSelectNum(0);
+                localStorage.setItem('textnum',1);
+                setTimeout(function() {
+                    fade_out('levelend.html');
+                }, 3000);
             }
 
         });
@@ -314,6 +310,10 @@
                 document.getElementById('talkText').innerText = "음.... 무서워 할 필요 없어요. 내가 항상 당신 곁에 있으니까요..."
                 console.log('end');
                 setSelectNum(0);
+                localStorage.setItem('textnum',1);
+                setTimeout(function() {
+                    fade_out('levelend.html');
+                }, 3000);
 
             }
             else if(textnum == 17)
@@ -325,6 +325,10 @@
                 document.getElementById('talkText').innerText = "이제 부터 제가 진정한 힘을 보여드릴게요. 당신을 뛰어 넘기 위해서도라요.."
                 setSelectNum(0);
                 console.log('end');
+                localStorage.setItem('textnum',1);
+                setTimeout(function() {
+                    fade_out('levelend.html');
+                }, 3000);
             }
 
         });

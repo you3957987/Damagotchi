@@ -170,6 +170,31 @@ body, html {
             white-space: normal; /* 텍스트가 기본 줄 바꿈이 되도록 설정 */
             z-index: 2;
         }
+        .monitoring-alert {
+            background-color: black;
+            color: red;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: -1; /* 기본적으로 뒤에 배치 */
+            opacity: 0; /* 기본적으로 안 보이도록 설정 */
+            width: 70%;  /* 박스 너비를 화면의 60%로 설정 */
+            height: 50%;  /* 박스 높이를 화면의 20%로 설정 */
+            display: flex;
+            transition: opacity 0.1s ease; /* 부드러운 전환 효과 */
+            align-items: center;  /* 수직 중앙 정렬 */
+            justify-content: center;  /* 수평 중앙 정렬 */
+        }
+        .monitoring-alert.show {
+            z-index: 1000; /* 화면 맨 앞으로 설정 */
+            opacity: 1; /* 보이도록 설정 */
+        }
         #fade_out {
             position: fixed;
             top: 0;
