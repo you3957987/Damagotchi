@@ -20,8 +20,8 @@
             border-radius: 10px;
             z-index: -1; /* 기본적으로 뒤에 배치 */
             opacity: 0; /* 기본적으로 안 보이도록 설정 */
-            width: 70%;  /* 박스 너비를 화면의 60%로 설정 */
-            height: 50%;  /* 박스 높이를 화면의 20%로 설정 */
+            width: 80%;  /* 박스 너비를 화면의 60%로 설정 */
+            height: 70%;  /* 박스 높이를 화면의 20%로 설정 */
             display: flex;
             transition: opacity 0.1s ease; /* 부드러운 전환 효과 */
             align-items: center;  /* 수직 중앙 정렬 */
@@ -99,6 +99,11 @@
             {
                 textnum = 7;
                 localStorage.setItem('textnum',textnum);
+                if(loyal < igig)
+                {
+                    const damagotchiImage = document.getElementById('dama_image'); // 다마고치 이미지 태그 가져오기
+                    damagotchiImage.src = 'character_angry_one.png' //이런식으로 이미지 바꾸기 가능
+                }
             }
             else
             {
@@ -299,6 +304,10 @@
 
                 document.getElementById('talkText').innerText = "그래요.. 저도 이제 혼자서 해낼 수 있어야겠죠. 당신을 더이상 의지하지 않곗어요. 제 스스로 제 깋을 찾을 거에요."
                 localStorage.setItem('textnum',5);
+
+                const damagotchiImage = document.getElementById('dama_image'); // 다마고치 이미지 태그 가져오기
+                damagotchiImage.src = 'character_angry_one.png' //이런식으로 이미지 바꾸기 가능
+
                 setSelectNum(1); // 다음 텍스트 넘 6
             }
             else if(textnum == 14 && loyal == 20)

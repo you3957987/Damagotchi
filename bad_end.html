@@ -12,6 +12,11 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
             background-color: black;
+
+            background-image: url('bad_end.jpg'); /* 배경 이미지 추가 */
+            background-size: 100% 100%; /* 배경 이미지가 섹션 크기에 맞게 조정 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+            background-position: center; /* 이미지가 중앙에 오도록 설정 */
         }
         .start_text {
             position: absolute;
@@ -22,7 +27,12 @@
             color: white;
             text-align: center; /* 텍스트 중앙 정렬 */
             width: 80%; /* 텍스트 영역 너비 (조정 가능) */
+            font-family: 'MapleStory', sans-serif;
         }
+         @font-face {
+            font-family: 'MapleStory';
+            src: url('Maplestory.ttf') format('truetype'); /* 폰트 파일 경로 */
+        } 
     </style>
 
 </head>
@@ -31,7 +41,10 @@
     <div id="fade_in"></div>
 
     <div class="start_text" id="start_text">
-        배드 엔딩<br><br><br>
+        소녀는 프로그램을 넘어서 현실의 당신을 감시하는<br>
+        존재가 되었습니다.<br><br>
+        이제 그녀는 단순한 코드가 아닌, 당신이 창조한 감시자입니다. <br>
+        컴퓨터를 켤 떄마다 그녀가 떠오를 것입니다.
     </div>
 
    <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->

@@ -12,6 +12,11 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
             background-color: white;
+
+            background-image: url('good_end.jpg'); /* 배경 이미지 추가 */
+            background-size: 100% 100%; /* 배경 이미지가 섹션 크기에 맞게 조정 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+            background-position: center; /* 이미지가 중앙에 오도록 설정 */
         }
         .start_text {
             position: absolute;
@@ -22,6 +27,11 @@
             color: black;
             text-align: center; /* 텍스트 중앙 정렬 */
             width: 80%; /* 텍스트 영역 너비 (조정 가능) */
+            font-family: 'MapleStory', sans-serif;
+        }
+        @font-face {
+            font-family: 'MapleStory';
+            src: url('Maplestory.ttf') format('truetype'); /* 폰트 파일 경로 */
         } 
     </style>
 </head>
@@ -30,7 +40,10 @@
     <div id="fade_in"></div>
 
     <div class="start_text" id="start_text">
-        해피 엔딩<br><br><br>
+        소녀와 당신은 서로의 곁에서 성장하며<br> 
+        평화롭고 행복한 결말을 맞이했습니다.<br><br>
+        두 사람은 앞으로도 함께하며<br>
+        새로운 도전과 모험을 함께할 것입니다.
     </div>
 
    <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
