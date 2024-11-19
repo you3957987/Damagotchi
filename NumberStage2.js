@@ -6,7 +6,7 @@ let score = 0;  // 점수
 let fallingNumbers = [];  // 떨어지는 숫자 저장
 let fallingBlock = [];  // 떨어지는 블록 저장
 let keys = {};  // 키 입력 상태 저장
-let gameDuration = 30000; // 게임 진행 시간 (30초)
+let gameDuration = 5000; // 게임 진행 시간 (30초)
 let startTime; // 게임 시작 시간
 let button; // 버튼 객체
 let buttonActive = false; // 버튼 활성화 여부
@@ -242,11 +242,25 @@ function update() {
         ctx.font = '30px Arial';
         if (score > 50 && score < 100) { //클리어 조건 체크
             ctx.fillText("Good game!", canvas.width / 2 - 75, canvas.height / 2);
+
+            setTimeout(function() {
+                // 실행할 코드
+                fade_out("leveltwo.html");
+            }, 3000);
         } else {
             ctx.fillText("Bad Game!", canvas.width / 2 - 75, canvas.height / 2);
+
+            setTimeout(function() {
+                // 실행할 코드
+                fade_out("leveltwo.html");
+            }, 3000);
         }
     }
 }
+
+window.onload = function() {
+        fade_in();
+    };
 
 // 게임 시작
 startTime = Date.now(); // 게임 시작 시간 기록
