@@ -22,17 +22,27 @@
         </div>
 
     </div>
+<!-- 클릭 사운드 추가 -->
+<audio id="clickSound">
+    <source src="click.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
 
    <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
 
    <script>
     // 시작 버튼을 클릭하면 다마고치 이름을 로컬 스토리지에 저장하고 'levelone.html'로 이동
-        document.getElementById('startButton').addEventListener(
-            'click', () => {
+    document.getElementById('startButton').addEventListener('click', () => {
+        const clickSound = document.getElementById('clickSound');
 
-            fade_out('prolouge.html');            
-            }
-        );
-    </script>
+        // 효과음 재생
+        clickSound.play().catch(error => {
+            console.warn('효과음 재생이 차단되었습니다. 클릭으로 시도하세요.');
+        });
+
+        // 페이지 전환
+        fade_out('prolouge.html');
+    });
+</script>
 </body>
 </html>

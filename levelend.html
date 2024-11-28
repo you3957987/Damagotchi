@@ -98,11 +98,38 @@
         <div class="talk_text_area" id="talkText"></div>  
     </div><!--컨테이너-->
 
+
+
+    <!-- 배경음악 추가 -->
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="마지막엔딩.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="statusClickSound">
+        <source src="상태창 클릭.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+
+
     <script src = "textfile.js"></script>> <!--텍스트 파일 가져오기-->
     <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
     <script src = "img_load.js"></script>> <!--이미지 파일 가져오기-->
 
     <script>
+        // 브라우저 자동 재생 정책 대응
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('backgroundMusic');
+            audio.play().catch(error => {
+                console.warn('음악 재생이 차단되었습니다. 클릭으로 재생하세요.');
+            });
+
+            document.body.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                }
+            });
+        });
         let previousRandomValue = null; // 이전 랜덤 값을 저장할 변수
         // 로컬 스토리지에서 이름을 가져와서 출력
         const name = localStorage.getItem('damagotchiName') || '다마고치'; // 이름이 없으면 기본값 사용
@@ -197,7 +224,8 @@
         }
 
         /////////////////////버튼 관리
-         document.getElementById('button1').addEventListener('click', function() { // 1번 버튼      
+         document.getElementById('button1').addEventListener('click', function() { // 1번 버튼     
+            statusClickSound.play(); // 클릭 사운드 재생 
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
             if(textnum == 2)
@@ -240,15 +268,18 @@
 
         });
         document.getElementById('button2').addEventListener('click', function() { // 2번 버튼
+            statusClickSound.play(); // 클릭 사운드 재생
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
         
         });
 
         document.getElementById('button3').addEventListener('click', function() { // 3번 버튼
+            statusClickSound.play(); // 클릭 사운드 재생
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
         });
         document.getElementById('button4').addEventListener('click', function() { // 4번 버튼
+            statusClickSound.play(); // 클릭 사운드 재생
              textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
 

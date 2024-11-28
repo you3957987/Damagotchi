@@ -49,9 +49,31 @@
     <div id="fade_out"></div> <!-- 페이드 인 아웃 -->
 
     <canvas id="숫자게임" width="600" height="400"></canvas>
+       <!-- 배경음악 추가 -->
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="중간기게임.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+
     <script src="NumberStage2.js"></script>
 
     <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
+    <script>
+        // 브라우저 자동 재생 정책 대응
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('backgroundMusic');
+            audio.play().catch(error => {
+                console.warn('음악 재생이 차단되었습니다. 클릭으로 재생하세요.');
+            });
+
+            document.body.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

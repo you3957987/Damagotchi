@@ -8,6 +8,24 @@
   
 </head>
 <body>
+     
+     <!-- 배경음악 추가 -->
+     <audio id="backgroundMusic" autoplay loop>
+        <source src="유아기 게임.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <!-- 버튼 클릭 사운드 -->
+<audio id="statusClickSound">
+    <source src="상태창 클릭.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<audio id="selectionSound">
+    <source src="선택 음악.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+
+
     <div id="fade_in"></div> <!-- 페이드 인 아웃 -->
     <div id="fade_out"></div> <!-- 페이드 인 아웃 -->
     <!-- 전체 화면을 차지하는 컨테이너 -->
@@ -48,14 +66,32 @@
     <script src = "img_load.js"></script>> <!--이미지 파일 가져오기-->
 
     <script>
+
+          // 브라우저 자동 재생 정책 대응
+          document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('backgroundMusic');
+            const statusClickSound = document.getElementById('statusClickSound');
+
+            // 음악 재생 시도
+            audio.play().catch(error => {
+                console.warn('음악 재생이 차단되었습니다. 클릭으로 재생하세요.');
+            });
+
+            // 사용자가 클릭했을 때 음악 재생 보장
+            document.body.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                }
+            });
+        });
         let previousRandomValue = null; // 이전 랜덤 값을 저장할 변수
         // 로컬 스토리지에서 이름을 가져와서 출력
         const name = localStorage.getItem('damagotchiName') || '다마고치'; // 이름이 없으면 기본값 사용
         document.getElementById('damagotchiName').innerText = `${name}`;
         
         // food와 happy 변수를 로컬 스토리지에서 가져와서 출력
-        const food = localStorage.getItem('food') || 0; // 기본값은 0
-        const happy = localStorage.getItem('happy') || 0; // 기본값은 0
+        let food = localStorage.getItem('food') || 0; // 기본값은 0
+        let happy = localStorage.getItem('happy') || 0; // 기본값은 0
         document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
         document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
 
@@ -84,6 +120,7 @@
                 setSelectNum(1); // 8
             }
         };
+        const selectionSound = document.getElementById('selectionSound');
         // 버튼 활성화 함수
         function activateButtons(num) {
             Number(num);// 문자열 정수로 변환
@@ -110,20 +147,28 @@
             activateButtons(select_num);// 버튼 초기화
         }
         function foodMinigameClicked() {
+    // 효과음 재생
+    selectionSound.currentTime = 0; // 중복 재생 방지
+    selectionSound.play();
 
-            //window.location.href = 'multiminigame.html';//이거 쓰는거 아님!!!!
-            localStorage.setItem('foodgame',2);
-            fade_out('levelone_multigame.html');// 페이지 전환은 이걸로!!
-        }
-
+    // 효과음 재생 후 페이지 전환
+    setTimeout(() => {
+        localStorage.setItem('foodgame', 2);
+        fade_out('levelone_multigame.html'); // 페이지 전환
+    }, 1500); // "선택 음악.mp3"의 길이에 맞게 조정
+}
         // happy minigame 클릭 시 실행할 함수
         function happyMinigameClicked() {
+    // 효과음 재생
+    selectionSound.currentTime = 0; // 중복 재생 방지
+    selectionSound.play();
 
-            localStorage.setItem('happygame',2);            
-            //window.location.href = 'happyminigame.html'; // 여기에 다른 미니게임 넣을 예정
-
-            fade_out('NumberGame1.html');
-        }
+    // 효과음 재생 후 페이지 전환
+    setTimeout(() => {
+        localStorage.setItem('happygame', 2);
+        fade_out('NumberGame1.html'); // 페이지 전환
+    }, 1500); // "선택 음악.mp3"의 길이에 맞게 조정
+}
         /* 쓸모 없음 ㅜㅜ
         
         document.getElementById('damagotchi').addEventListener('click', () => {
@@ -148,7 +193,10 @@
         });
         */
         /////////////////////버튼 관리
+        // 오디오 요소 가져오기
+        const statusClickSound = document.getElementById('statusClickSound');
          document.getElementById('button1').addEventListener('click', function() { // 1번 버튼      
+            statusClickSound.play(); // 사운드 재생
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
             if(textnum == 2)
@@ -165,6 +213,9 @@
             }
             else if(textnum == 5)
             {
+                happy = parseInt(happy) + 20;
+                localStorage.setItem('happy',happy);
+                document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
                 setSelectNum(1); // 6
                 document.getElementById('talkText').innerText = "당신과 함께할려고 만든 미니게임들이 있는데 같이 하실래요?";
             }
@@ -197,17 +248,26 @@
             }
             else if(textnum == 10)// 먹이 주기 선택지
             {
+                food = parseInt(food) + 20;
+                localStorage.setItem('food',food);
+                document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
                 setSelectNum(2); // 11,12
                 document.getElementById('talkText').innerText = "마침 배고팠는데 좋아요!!";
             }
             else if(textnum == 12) // 과자 주기
             {
+                food = parseInt(food) + 20;
+                localStorage.setItem('food',food);
+                document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
                 document.getElementById('talkText').innerText = "저도 달달한게 먹고싶었는데 저희는 서로 통하는게 있나봐요!!"; // 다음 텍스트 넘은 13
                 localStorage.setItem('textnum', 13);// 로컬에 텍스트 넘 저장 다음 텍스트 넘은 13
                 setSelectNum(1); // 13텍스트가 출력되고 텍스트 넘은 14가 됨
             }
             else if(textnum == 13)// 다음에도 같이 놀자 다음 선택지
             {
+                happy = parseInt(happy) + 20;
+                localStorage.setItem('happy',happy);
+                document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
                 document.getElementById('talkText').innerText = "저희는 서로 통하는 게 있는것 같아요!"; // 다음 텍스트 넘은 13
                 localStorage.setItem('textnum', 13);// 로컬에 텍스트 넘 저장 다음 텍스트 넘은 13
                 setSelectNum(1); // 13텍스트가 출력되고 텍스트 넘은 14가 됨
@@ -238,27 +298,40 @@
 
         });
         document.getElementById('button2').addEventListener('click', function() { // 2번 버튼
+            statusClickSound.play(); // 사운드 재생
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
             if(textnum == 5)
             {
+                happy = parseInt(happy) + 20;
+                localStorage.setItem('happy',happy);
+                document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
                 setSelectNum(1); // 6
                 document.getElementById('talkText').innerText = "여기서는 매일 같은 일이 반복되나깐요... 저랑 같이 미니게임 하면서 놀아주실 수 있나요?";
             }
             else if(textnum == 10) // 칭찬하기 선택지
             {
+                happy = parseInt(happy) + 20;
+                localStorage.setItem('happy',happy);
+                document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
                 localStorage.setItem('textnum', 12);// 로컬에 텍스트 넘 저장
                 setSelectNum(1); // 13텍스트가 출력되고 텍스트 넘은 14가 됨
                 document.getElementById('talkText').innerText = "정말요? 칭찬받으니깐 기쁘네요!. 다음에도 같이 놀아주실 꺼죠?";
             }
             else if(textnum == 12) // 과일 주기
             {
+                food = parseInt(food) + 20;
+                localStorage.setItem('food',food);
+                document.getElementById('foodStatus').innerText = `포만감 : ${food}`;
                 document.getElementById('talkText').innerText = "저도 상큼한게 먹고싶었는데 저희는 서로 통하는게 있나봐요!!"; // 다음 텍스트 넘은 13
                 localStorage.setItem('textnum', 13);// 로컬에 텍스트 넘 저장 다음 텍스트 넘은 14
                 setSelectNum(1); // 13텍스트가 출력되고 텍스트 넘은 14가 됨
             }
             else if(textnum == 16)// 중간기로 넘어가기
             {
+                happy = parseInt(happy) + 20;
+                localStorage.setItem('happy',happy);
+                document.getElementById('happyStatus').innerText = `행복도 : ${happy}`;
                 document.getElementById('talkText').innerText = "정말요? 그럼 저를 더욱 잘 돌봐주세요! 이제 새로운 것을 배우고 싶어요!";
                 localStorage.setItem('textnum', 19);// 로컬에 텍스트 넘 저장 다음 텍스트 넘은 14
                 setSelectNum(1); // 19 번째 텍스트 출력후 텍스트 넘은 20
@@ -268,10 +341,12 @@
         });
 
         document.getElementById('button3').addEventListener('click', function() { // 3번 버튼
+            statusClickSound.play(); // 사운드 재생
             textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
         });
         document.getElementById('button4').addEventListener('click', function() { // 4번 버튼
+            statusClickSound.play(); // 사운드 재생
              textnum = localStorage.getItem('textnum'); // 텍스트 진행 순서 받기
 
 

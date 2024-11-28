@@ -29,13 +29,42 @@
         </div>
 
     </div>
+    <!-- 배경음악 추가 -->
+<audio id="backgroundMusic" autoplay loop>
+    <source src="유아기 배경화면.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<audio id="clickSound">
+    <source src="click.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+
 
    <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
-
    <script>
+    // 브라우저 자동 재생 정책 대응
+    document.addEventListener('DOMContentLoaded', () => {
+        const audio = document.getElementById('backgroundMusic');
+        audio.play().catch(error => {
+            console.warn('음악 재생이 차단되었습니다. 클릭으로 재생하세요.');
+        });
+
+        // 사용자가 클릭하면 음악 강제 재생
+        document.body.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+            }
+        });
+    });
+</script>
+   <script>
+    
     // 시작 버튼을 클릭하면 다마고치 이름을 로컬 스토리지에 저장하고 'levelone.html'로 이동
-        document.getElementById('startButton').addEventListener(
-            'click', () => {
+    document.getElementById('startButton').addEventListener('click', () => {
+    // 클릭 사운드 재생
+    const clickSound = document.getElementById('clickSound');
+    clickSound.play();
             const name = document.getElementById('name').value; // 입력된 이름 가져오기
             localStorage.setItem('damagotchiName', name); // 로컬 스토리지에 이름 저장
             localStorage.setItem('food', 0);

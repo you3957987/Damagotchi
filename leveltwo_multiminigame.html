@@ -372,6 +372,13 @@
             <img src="right.png" alt="right_icon">
         </div>
     </div>
+     <!-- 배경음악 추가 -->
+     <audio id="backgroundMusic" autoplay loop>
+        <source src="중간기게임.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+
     <script src = "LoadingFunction.js"></script>> <!--로딩 함수 파일 가져오기-->
     <script>
         let container = document.getElementById('container');
@@ -416,7 +423,19 @@
                 fade_out("NumberGame2.html");// 일정 점수 흭득시 다시 레벨1 화면으로 이동
             }
         }
+         // 브라우저 자동 재생 정책 대응
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('backgroundMusic');
+            audio.play().catch(error => {
+                console.warn('음악 재생이 차단되었습니다. 클릭으로 재생하세요.');
+            });
 
+            document.body.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                }
+            });
+        });
         // 막대를 계속 이동하는 함수
         function moveRod() {
             if(!isRunning) return;
