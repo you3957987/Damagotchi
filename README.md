@@ -1,6 +1,18 @@
-[![Notion](https://img.shields.io/badge/노션_포트폴리오_바로가기-%232F343B.svg?style=for-the-badge&logo=notion&logoColor=white)](https://app.notion.com/p/3068942a9aa6808296ecf9d57a215e4f?source=copy_link)
+<div align="center">
+  
+  # 🐣 다망치고치 (ダメごっち)
+  
+  [![Notion](https://img.shields.io/badge/노션_포트폴리오-%232F343B.svg?style=for-the-badge&logo=notion&logoColor=white)](https://app.notion.com/p/3068942a9aa6808296ecf9d57a215e4f?source=copy_link)
+  
+  <br>
 
-### 프로젝트 개요
+  <img width="800" alt="메인" src="https://github.com/user-attachments/assets/9988d5a5-0649-40ff-a85c-e92e77d20582" />
+
+</div>
+
+<br>
+
+### 📌 프로젝트 개요
 
 * **성격 :** 상명대학교 웹콘텐츠 개발 전공 수업 프로젝트
 * **핵심 목표 :** HTML, CSS, JavaScript만을 활용하여, 데이터 상태(Status)에 따라 스토리가 분기되는 멀티 엔딩 시스템과 동적인 멀티태스킹 미니게임을 갖춘 웹 게임 개발
